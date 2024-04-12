@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>rwa3_group3</name>
+  <version>0.0.0</version>
+  <description>RWA3 assignment</description>
+  <maintainer email="darshit@umd.edu">Darshit Miteshkumar Desai</maintainer>
+  <maintainer email="ppordi@umd.edu">Patrik Dominik Pordi</maintainer>
+  <maintainer email="ssehgal07@umd.edu">Shivam Sehgal</maintainer>
+  <maintainer email="rohithvs@umd.edu">Rohith Vikram Saravanan</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>ariac_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
