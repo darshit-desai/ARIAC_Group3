@@ -25,6 +25,7 @@ install(TARGETS
 # Install directories in the correct destination
 install(DIRECTORY
   launch
+  config
   DESTINATION share/${PROJECT_NAME}
 )
 

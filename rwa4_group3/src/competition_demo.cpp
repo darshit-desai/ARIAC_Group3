@@ -312,6 +312,25 @@ void CompetitorInterface::processOrders() {
   }
 }
 
+void CompetitorInterface::kts1Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+  
+}
+
+void CompetitorInterface::kts2Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+
+}
+
+void CompetitorInterface::leftBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+
+}
+
+void CompetitorInterface::rightBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+
+}
+
+
+
+
 /**
  * @brief Main function to initialize the competitor node
  *

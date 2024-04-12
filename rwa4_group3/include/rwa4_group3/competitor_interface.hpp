@@ -22,13 +22,16 @@
 #include <ariac_msgs/msg/order.hpp>
 #include <ariac_msgs/srv/move_agv.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
+#include <ariac_msgs/msg/AdvancedLogicalCameraImage.hpp>
+
 #include <chrono>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/subscription_options.hpp>
-#include <rwa4_group3/utils_interface.hpp>
 #include <std_srvs/srv/trigger.hpp>
 #include <string>
 #include <vector>
+
+#include <rwa4_group3/utils_interface.hpp>
 
 /**
  * @brief Competitor Interface class
@@ -102,6 +105,30 @@ class CompetitorInterface : public rclcpp::Node {
             std::bind(&CompetitorInterface::agv4StatusCallback, this,
                       std::placeholders::_1),
             options3_);
+    // Create a subscribe to /ariac/sensors/kts1_camera/image
+    kts1_subscriber_ =
+        this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
+            "ariac/sensors/kts1_camera/image", 10,
+            std::bind(&CompetitorInterface::kts1Callback, this,
+                      std::placeholders::_1));
+    // Create a subscribe to /ariac/sensors/kts2_camera/image
+    kts2_subscriber_ =
+        this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
+            "ariac/sensors/kts2_camera/image", 10,
+            std::bind(&CompetitorInterface::kts2Callback, this,
+                      std::placeholders::_1));
+    // Create a subscribe to /ariac/sensors/left_bins_camera/image
+    left_bins_camera_subscriber_ =
+        this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
+            "ariac/sensors/left_bins_camera/image", 10,
+            std::bind(&CompetitorInterface::leftBinsCameraCallback, this,
+                      std::placeholders::_1));
+    // Create a subscribe to /ariac/sensors/right_bins_camera/image
+    right_bins_camera_subscriber_ =
+        this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
+            "ariac/sensors/right_bins_camera/image", 10,
+            std::bind(&CompetitorInterface::rightBinsCameraCallback, this,
+                      std::placeholders::_1));    
   }
 
  private:
@@ -126,6 +153,14 @@ class CompetitorInterface : public rclcpp::Node {
       agv3_status_subscriber_;  ///< Subscriber to AGV 3 status
   rclcpp::Subscription<ariac_msgs::msg::AGVStatus>::SharedPtr
       agv4_status_subscriber_;  ///< Subscriber to AGV 4 status
+  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
+      kts1_subscriber_;  ///< Subscriber to the kit tray camera sensor 1
+  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
+      kts2_subscriber_;  ///< Subscriber to the kit tray camera sensor 2
+  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
+      left_bins_camera_subscriber_;  ///< Subscriber to the left bins camera
+  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
+      right_bins_camera_subscriber_;  ///< Subscriber to the right bins camera
   unsigned int agv1_location_;  ///< Location of AGV 1 class attribute
   unsigned int agv2_location_;  ///< Location of AGV 2 class attribute
   unsigned int agv3_location_;  ///< Location of AGV 3 class attribute
@@ -136,6 +171,10 @@ class CompetitorInterface : public rclcpp::Node {
   std::vector<Order> interrupted_orders_;    ///< Interrupted orders list
   std::vector<Order> active_order_;          ///< Active orders list
   std::vector<Order> completed_orders_;      ///< Completed orders list
+  std::vector<Trays> trays1_;                 ///< Trays1 list
+  std::vector<Trays> trays2_;                 ///< Trays2 list
+  std::vector<Parts> left_parts_;             ///< Left parts list
+  std::vector<Parts> right_parts_;            ///< Right parts list
   double time_interval_;  ///< Time interval for the timer callback function
   /**
    * @brief Declaration of the callback function for the competition state

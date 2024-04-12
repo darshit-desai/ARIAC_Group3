@@ -148,3 +148,29 @@ class Order {
   bool incomplete_;     ///< flag to check if the order is incomplete
   double time_passed_;  ///< time passed since the order was received
 };
+
+class Parts {
+ public:
+ Parts(ariac_msgs::Part part) : part_type_(part.type), part_color_(part.color), part_pose_(part.pose), part_sensor_pose_(part.sensor_pose) {}
+  unsigned int getPartType() { return part_type_; }
+  unsigned int getPartColor() { return part_color_; }
+  geometry_msgs::msg::Pose getPartPose() { return part_pose_; }
+  geometry_msgs::msg::Pose getPartSensorPose() { return part_sensor_pose_; }
+ private:
+ unsigned int part_type_;
+ unsigned int part_color_;
+ geometry_msgs::msg::Pose part_pose_;
+ geometry_msgs::msg::Pose part_sensor_pose_;
+};
+
+class Trays {
+ public:
+ Trays(ariac_msgs::Tray tray) : tray_id_(tray.tray_id), tray_pose_(tray.pose), tray_sensor_pose_(tray.sensor_pose) {}
+  unsigned int getTrayId() { return tray_id_; }
+  geometry_msgs::msg::Pose getTrayPose() { return tray_pose_; }
+  geometry_msgs::msg::Pose getTraySensorPose() { return tray_sensor_pose_; }
+ private:
+ unsigned int tray_id_;
+ geometry_msgs::msg::Pose tray_pose_;
+ geometry_msgs::msg::Pose tray_sensor_pose_;
+};

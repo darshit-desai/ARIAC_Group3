@@ -39,3 +39,19 @@ bool Order::isIncomplete() { return incomplete_; }
 void Order::completeOrder() { incomplete_ = false; }
 //=========================================
 void Order::setTimePassed(double time_passed) { time_passed_ = time_passed; }
+
+//=========================================
+unsigned int Parts::getPartType() { return part_type_; }
+//=========================================
+unsigned int Parts::getPartColor() { return part_color_; }
+//=========================================
+geometry_msgs::msg::Pose Parts::getPartPose() { return part_pose_; }
+//=========================================
+geometry_msgs::msg::Pose Parts::getPartSensorPose() { return part_sensor_pose_; }
+
+//=========================================
+unsigned int Trays::getTrayId() { return tray_id_; }
+//=========================================
+geometry_msgs::msg::Pose Trays::getTrayPose() { return tray_pose_; }
+//=========================================
+geometry_msgs::msg::Pose Trays::getTraySensorPose() { return tray_sensor_pose_; }
