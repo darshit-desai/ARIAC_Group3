@@ -46,12 +46,8 @@ unsigned int Parts::getPartType() { return part_type_; }
 unsigned int Parts::getPartColor() { return part_color_; }
 //=========================================
 geometry_msgs::msg::Pose Parts::getPartPose() { return part_pose_; }
-//=========================================
-geometry_msgs::msg::Pose Parts::getPartSensorPose() { return part_sensor_pose_; }
 
 //=========================================
 unsigned int Trays::getTrayId() { return tray_id_; }
 //=========================================
 geometry_msgs::msg::Pose Trays::getTrayPose() { return tray_pose_; }
-//=========================================
-geometry_msgs::msg::Pose Trays::getTraySensorPose() { return tray_sensor_pose_; }
