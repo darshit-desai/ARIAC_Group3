@@ -334,12 +334,14 @@ void CompetitorInterface::kts1Callback(const ariac_msgs::msg::AdvancedLogicalCam
     for (size_t i = 0; i < tray_poses.size(); i++) {
       geometry_msgs:: msg::Pose world_tray_pose = worldFramePose(tray_poses[i].pose, sensor_position);
       Trays tray_obj(tray_poses[i].id, world_tray_pose);
+      // set key as the tray id and value as the tray object
+      unsigned int curr_tray_id = tray_obj.getTrayId();
       // If key doesn't exist in the unordered_map insert it
-      if (trays1_.find(tray_obj.getTrayId()) == trays1_.end()) {
-        trays1_.insert({tray_obj.getTrayId(), {tray_obj}});
+      if (trays1_.find(curr_tray_id) == trays1_.end()) {
+        trays1_.insert({curr_tray_id, {tray_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        trays1_[tray_obj.getTrayId()].push_back(tray_obj);
+        trays1_[curr_tray_id].push_back(tray_obj);
       }
     }
   }
@@ -356,12 +358,14 @@ void CompetitorInterface::kts2Callback(const ariac_msgs::msg::AdvancedLogicalCam
     for (size_t i = 0; i < tray_poses.size(); i++) {
       geometry_msgs:: msg::Pose world_tray_pose = worldFramePose(tray_poses[i].pose, sensor_position);
       Trays tray_obj(tray_poses[i].id, world_tray_pose);
+      // set key as the tray id and value as the tray object
+      unsigned int curr_tray_id = tray_obj.getTrayId();
       // If key doesn't exist in the unordered_map insert it
-      if (trays2_.find(tray_obj.getTrayId()) == trays2_.end()) {
-        trays2_.insert({tray_obj.getTrayId(), {tray_obj}});
+      if (trays2_.find(curr_tray_id) == trays2_.end()) {
+        trays2_.insert({curr_tray_id, {tray_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        trays2_[tray_obj.getTrayId()].push_back(tray_obj);
+        trays2_[curr_tray_id].push_back(tray_obj);
       }
     }
   }
@@ -378,12 +382,15 @@ void CompetitorInterface::leftBinsCameraCallback(const ariac_msgs::msg::Advanced
     for (size_t i = 0; i < left_part_poses.size(); i++) {
       geometry_msgs::msg::Pose world_part_pose = worldFramePose(left_part_poses[i].pose, sensor_position);
       Parts part_obj(left_part_poses[i].part, world_part_pose);
+      // use the part type and part color as the key
+      unsigned int curr_part_type = part_obj.getPartType();
+      unsigned int curr_part_color = part_obj.getPartColor();
       // If key doesn't exist in the unordered_map insert it
-      if (left_bins_.find(std::make_pair(part_obj.getPartType(), part_obj.getPartColor())) == left_bins_.end()) {
-        left_bins_.insert({std::make_pair(part_obj.getPartType(), part_obj.getPartColor()), {part_obj}});
+      if (left_bins_.find(std::make_pair(curr_part_type, curr_part_color)) == left_bins_.end()) {
+        left_bins_.insert({std::make_pair(curr_part_type, curr_part_color), {part_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        left_bins_[std::make_pair(part_obj.getPartType(), part_obj.getPartColor())].push_back(part_obj);
+        left_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(part_obj);
       }
     }
   }
@@ -400,12 +407,15 @@ void CompetitorInterface::rightBinsCameraCallback(const ariac_msgs::msg::Advance
     for (size_t i = 0; i < right_part_poses.size(); i++) {
       geometry_msgs::msg::Pose world_part_pose = worldFramePose(right_part_poses[i].pose, sensor_position);
       Parts part_obj(right_part_poses[i].part, world_part_pose);
+      // use the part type and part color as the key
+      unsigned int curr_part_type = part_obj.getPartType();
+      unsigned int curr_part_color = part_obj.getPartColor();
       // If key doesn't exist in the unordered_map insert it
-      if (right_bins_.find(std::make_pair(part_obj.getPartType(), part_obj.getPartColor())) == right_bins_.end()) {
-        right_bins_.insert({std::make_pair(part_obj.getPartType(), part_obj.getPartColor()), {part_obj}});
+      if (right_bins_.find(std::make_pair(curr_part_type, curr_part_color)) == right_bins_.end()) {
+        right_bins_.insert({std::make_pair(curr_part_type, curr_part_color), {part_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        right_bins_[std::make_pair(part_obj.getPartType(), part_obj.getPartColor())].push_back(part_obj);
+        right_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(part_obj);
       }
     }
   }
@@ -422,13 +432,16 @@ geometry_msgs::msg::Pose CompetitorInterface::worldFramePose(geometry_msgs::msg:
 void CompetitorInterface::printOrderWiseParts(Order order) {
   bool tray_found = false;
   // Print boolean result of trays1_ empty or not
+  // get the curr order tray id
+  unsigned int curr_order_tray_id = order.getOrderTask().getTrayId();
   std::cout << "Trays 1 empty: " << trays1_.empty() << std::endl;
   if (!tray_found) {
+    
     std::cout<<"Tray 1 checking\n";
-    std::cout << "Tray 1 count: " << trays1_.count(order.getOrderTask().getTrayId()) << std::endl;
-    if (trays1_.count(order.getOrderTask().getTrayId()) > 0) {
+    std::cout << "Tray 1 count: " << trays1_.count(curr_order_tray_id) << std::endl;
+    if (trays1_.count(curr_order_tray_id) > 0) {
       tray_found = true;
-      Trays tray_obj = trays1_[order.getOrderTask().getTrayId()].front();
+      Trays tray_obj = trays1_[curr_order_tray_id].front();
       geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
       //Convert orientation from quaternion to RPY
       tf2::Quaternion q(
@@ -445,10 +458,10 @@ void CompetitorInterface::printOrderWiseParts(Order order) {
       << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
       << "\n=====================================\n");
       // Erase the tray from the vector
-      trays1_[order.getOrderTask().getTrayId()].erase(trays1_[order.getOrderTask().getTrayId()].begin());
+      trays1_[curr_order_tray_id].erase(trays1_[curr_order_tray_id].begin());
       // If the vector is empty erase key from the map
-      if (trays1_[order.getOrderTask().getTrayId()].empty()) {
-        trays1_.erase(order.getOrderTask().getTrayId());
+      if (trays1_[curr_order_tray_id].empty()) {
+        trays1_.erase(curr_order_tray_id);
       }
     }
   }
@@ -456,10 +469,10 @@ void CompetitorInterface::printOrderWiseParts(Order order) {
   std::cout << "Trays 2 empty: " << trays2_.empty() << std::endl; 
   if (!tray_found) {
     std::cout<<"Tray 2 checking\n";
-    std::cout << "Tray 2 count: " << trays2_.count(order.getOrderTask().getTrayId()) << std::endl;
-    if (trays2_.find(order.getOrderTask().getTrayId()) != trays2_.end()) {
+    std::cout << "Tray 2 count: " << trays2_.count(curr_order_tray_id) << std::endl;
+    if (trays2_.find(curr_order_tray_id) != trays2_.end()) {
       tray_found = true;
-      Trays tray_obj = trays2_[order.getOrderTask().getTrayId()].front();
+      Trays tray_obj = trays2_[curr_order_tray_id].front();
       geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
       //Convert orientation from quaternion to RPY
       tf2::Quaternion q(
@@ -476,10 +489,10 @@ void CompetitorInterface::printOrderWiseParts(Order order) {
       << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
       << "\n=====================================\n");
       // Erase the tray from the vector
-      trays2_[order.getOrderTask().getTrayId()].erase(trays2_[order.getOrderTask().getTrayId()].begin());
+      trays2_[curr_order_tray_id].erase(trays2_[curr_order_tray_id].begin());
       // If the vector is empty erase key from the map
-      if (trays2_[order.getOrderTask().getTrayId()].empty()) {
-        trays2_.erase(order.getOrderTask().getTrayId());
+      if (trays2_[curr_order_tray_id].empty()) {
+        trays2_.erase(curr_order_tray_id);
       }
     }
   }
