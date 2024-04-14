@@ -4,7 +4,7 @@
  *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
  * @brief Utility Interface class handles the information contained in order
  * message and kitting task details, This file is used to define the functions
- * @version 0.1
+ * @version 0.2
  * @date 2024-03-29
  *
  * @copyright Copyright (c) 2024

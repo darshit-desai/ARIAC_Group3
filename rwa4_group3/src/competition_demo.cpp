@@ -69,7 +69,6 @@ void CompetitorInterface::orderCallback(
     const ariac_msgs::msg::Order::SharedPtr msg) {
   RCLCPP_INFO_STREAM(this->get_logger(), msg->id);
   Order order(*msg);
-  
 
   if (msg->priority == true) {
     RCLCPP_INFO_STREAM(
@@ -246,8 +245,6 @@ void CompetitorInterface::processOrders() {
     printOrderWiseParts(low_priority_orders_.front());
   }
 
-
-
   if (active_order_.empty() && high_priority_orders_.empty() &&
       low_priority_orders_.empty() && interrupted_orders_.empty()) {
     RCLCPP_INFO_STREAM(this->get_logger(), "No orders to process...");
@@ -323,7 +320,8 @@ void CompetitorInterface::processOrders() {
   }
 }
 //=========================================
-void CompetitorInterface::kts1Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+void CompetitorInterface::kts1Callback(
+    const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
   if (!received_parts_trays1_) {
     received_parts_trays1_ = true;
     geometry_msgs::msg::Pose sensor_position;
@@ -332,7 +330,8 @@ void CompetitorInterface::kts1Callback(const ariac_msgs::msg::AdvancedLogicalCam
     std::vector<ariac_msgs::msg::KitTrayPose> tray_poses;
     tray_poses = msg->tray_poses;
     for (size_t i = 0; i < tray_poses.size(); i++) {
-      geometry_msgs:: msg::Pose world_tray_pose = worldFramePose(tray_poses[i].pose, sensor_position);
+      geometry_msgs::msg::Pose world_tray_pose =
+          worldFramePose(tray_poses[i].pose, sensor_position);
       Trays tray_obj(tray_poses[i].id, world_tray_pose);
       // set key as the tray id and value as the tray object
       unsigned int curr_tray_id = tray_obj.getTrayId();
@@ -347,7 +346,8 @@ void CompetitorInterface::kts1Callback(const ariac_msgs::msg::AdvancedLogicalCam
   }
 }
 //=========================================
-void CompetitorInterface::kts2Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+void CompetitorInterface::kts2Callback(
+    const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
   if (!received_parts_trays2_) {
     received_parts_trays2_ = true;
     geometry_msgs::msg::Pose sensor_position;
@@ -356,7 +356,8 @@ void CompetitorInterface::kts2Callback(const ariac_msgs::msg::AdvancedLogicalCam
     std::vector<ariac_msgs::msg::KitTrayPose> tray_poses;
     tray_poses = msg->tray_poses;
     for (size_t i = 0; i < tray_poses.size(); i++) {
-      geometry_msgs:: msg::Pose world_tray_pose = worldFramePose(tray_poses[i].pose, sensor_position);
+      geometry_msgs::msg::Pose world_tray_pose =
+          worldFramePose(tray_poses[i].pose, sensor_position);
       Trays tray_obj(tray_poses[i].id, world_tray_pose);
       // set key as the tray id and value as the tray object
       unsigned int curr_tray_id = tray_obj.getTrayId();
@@ -371,7 +372,8 @@ void CompetitorInterface::kts2Callback(const ariac_msgs::msg::AdvancedLogicalCam
   }
 }
 //=========================================
-void CompetitorInterface::leftBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+void CompetitorInterface::leftBinsCameraCallback(
+    const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
   if (!received_parts_left_) {
     received_parts_left_ = true;
     geometry_msgs::msg::Pose sensor_position;
@@ -380,23 +382,28 @@ void CompetitorInterface::leftBinsCameraCallback(const ariac_msgs::msg::Advanced
     std::vector<ariac_msgs::msg::PartPose> left_part_poses;
     left_part_poses = msg->part_poses;
     for (size_t i = 0; i < left_part_poses.size(); i++) {
-      geometry_msgs::msg::Pose world_part_pose = worldFramePose(left_part_poses[i].pose, sensor_position);
+      geometry_msgs::msg::Pose world_part_pose =
+          worldFramePose(left_part_poses[i].pose, sensor_position);
       Parts part_obj(left_part_poses[i].part, world_part_pose);
       // use the part type and part color as the key
       unsigned int curr_part_type = part_obj.getPartType();
       unsigned int curr_part_color = part_obj.getPartColor();
       // If key doesn't exist in the unordered_map insert it
-      if (left_bins_.find(std::make_pair(curr_part_type, curr_part_color)) == left_bins_.end()) {
-        left_bins_.insert({std::make_pair(curr_part_type, curr_part_color), {part_obj}});
+      if (left_bins_.find(std::make_pair(curr_part_type, curr_part_color)) ==
+          left_bins_.end()) {
+        left_bins_.insert(
+            {std::make_pair(curr_part_type, curr_part_color), {part_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        left_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(part_obj);
+        left_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(
+            part_obj);
       }
     }
   }
 }
 //=========================================
-void CompetitorInterface::rightBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
+void CompetitorInterface::rightBinsCameraCallback(
+    const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg) {
   if (!received_parts_right_) {
     received_parts_right_ = true;
     geometry_msgs::msg::Pose sensor_position;
@@ -405,23 +412,28 @@ void CompetitorInterface::rightBinsCameraCallback(const ariac_msgs::msg::Advance
     std::vector<ariac_msgs::msg::PartPose> right_part_poses;
     right_part_poses = msg->part_poses;
     for (size_t i = 0; i < right_part_poses.size(); i++) {
-      geometry_msgs::msg::Pose world_part_pose = worldFramePose(right_part_poses[i].pose, sensor_position);
+      geometry_msgs::msg::Pose world_part_pose =
+          worldFramePose(right_part_poses[i].pose, sensor_position);
       Parts part_obj(right_part_poses[i].part, world_part_pose);
       // use the part type and part color as the key
       unsigned int curr_part_type = part_obj.getPartType();
       unsigned int curr_part_color = part_obj.getPartColor();
       // If key doesn't exist in the unordered_map insert it
-      if (right_bins_.find(std::make_pair(curr_part_type, curr_part_color)) == right_bins_.end()) {
-        right_bins_.insert({std::make_pair(curr_part_type, curr_part_color), {part_obj}});
+      if (right_bins_.find(std::make_pair(curr_part_type, curr_part_color)) ==
+          right_bins_.end()) {
+        right_bins_.insert(
+            {std::make_pair(curr_part_type, curr_part_color), {part_obj}});
       } else {
         // If key exists in the unordered_map insert it
-        right_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(part_obj);
+        right_bins_[std::make_pair(curr_part_type, curr_part_color)].push_back(
+            part_obj);
       }
     }
   }
 }
 //=========================================
-geometry_msgs::msg::Pose CompetitorInterface::worldFramePose(geometry_msgs::msg::Pose part_pose, geometry_msgs::msg::Pose sensor_pose) {
+geometry_msgs::msg::Pose CompetitorInterface::worldFramePose(
+    geometry_msgs::msg::Pose part_pose, geometry_msgs::msg::Pose sensor_pose) {
   KDL::Frame part_frame, sensor_frame, world_frame;
   tf2::fromMsg(part_pose, part_frame);
   tf2::fromMsg(sensor_pose, sensor_frame);
@@ -431,32 +443,27 @@ geometry_msgs::msg::Pose CompetitorInterface::worldFramePose(geometry_msgs::msg:
 //=========================================
 void CompetitorInterface::printOrderWiseParts(Order order) {
   bool tray_found = false;
-  // Print boolean result of trays1_ empty or not
-  // get the curr order tray id
   unsigned int curr_order_tray_id = order.getOrderTask().getTrayId();
-  std::cout << "Trays 1 empty: " << trays1_.empty() << std::endl;
   if (!tray_found) {
-    
-    std::cout<<"Tray 1 checking\n";
-    std::cout << "Tray 1 count: " << trays1_.count(curr_order_tray_id) << std::endl;
     if (trays1_.count(curr_order_tray_id) > 0) {
       tray_found = true;
       Trays tray_obj = trays1_[curr_order_tray_id].front();
       geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
-      //Convert orientation from quaternion to RPY
-      tf2::Quaternion q(
-        tray_pose.orientation.x,
-        tray_pose.orientation.y,
-        tray_pose.orientation.z,
-        tray_pose.orientation.w);
+      // Convert orientation from quaternion to RPY
+      tf2::Quaternion q(tray_pose.orientation.x, tray_pose.orientation.y,
+                        tray_pose.orientation.z, tray_pose.orientation.w);
       tf2::Matrix3x3 m(q);
       double roll, pitch, yaw;
       m.getRPY(roll, pitch, yaw);
-      RCLCPP_INFO_STREAM(this->get_logger(), "\n=====================================\n"
-      << "\nID: " << tray_obj.getTrayId() 
-      << "\nPosition (xyz): [" << tray_pose.position.x << ", " << tray_pose.position.y << ", " << tray_pose.position.z << "]"
-      << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
-      << "\n=====================================\n");
+      RCLCPP_INFO_STREAM(this->get_logger(),
+                         "\n=====================================\n"
+                             << "\nID: " << tray_obj.getTrayId()
+                             << "\nPosition (xyz): [" << tray_pose.position.x
+                             << ", " << tray_pose.position.y << ", "
+                             << tray_pose.position.z << "]"
+                             << "\nOrientation (rpy): [" << roll << ", "
+                             << pitch << ", " << yaw << "]"
+                             << "\n=====================================\n");
       // Erase the tray from the vector
       trays1_[curr_order_tray_id].erase(trays1_[curr_order_tray_id].begin());
       // If the vector is empty erase key from the map
@@ -466,28 +473,26 @@ void CompetitorInterface::printOrderWiseParts(Order order) {
     }
   }
   // Print boolean result of trays2_ empty or not
-  std::cout << "Trays 2 empty: " << trays2_.empty() << std::endl; 
   if (!tray_found) {
-    std::cout<<"Tray 2 checking\n";
-    std::cout << "Tray 2 count: " << trays2_.count(curr_order_tray_id) << std::endl;
     if (trays2_.find(curr_order_tray_id) != trays2_.end()) {
       tray_found = true;
       Trays tray_obj = trays2_[curr_order_tray_id].front();
       geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
-      //Convert orientation from quaternion to RPY
-      tf2::Quaternion q(
-        tray_pose.orientation.x,
-        tray_pose.orientation.y,
-        tray_pose.orientation.z,
-        tray_pose.orientation.w);
+      // Convert orientation from quaternion to RPY
+      tf2::Quaternion q(tray_pose.orientation.x, tray_pose.orientation.y,
+                        tray_pose.orientation.z, tray_pose.orientation.w);
       tf2::Matrix3x3 m(q);
       double roll, pitch, yaw;
       m.getRPY(roll, pitch, yaw);
-      RCLCPP_INFO_STREAM(this->get_logger(), "\n=====================================\n"
-      << "\nID: " << tray_obj.getTrayId() 
-      << "\nPosition (xyz): [" << tray_pose.position.x << ", " << tray_pose.position.y << ", " << tray_pose.position.z << "]"
-      << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
-      << "\n=====================================\n");
+      RCLCPP_INFO_STREAM(this->get_logger(),
+                         "\n=====================================\n"
+                             << "\nID: " << tray_obj.getTrayId()
+                             << "\nPosition (xyz): [" << tray_pose.position.x
+                             << ", " << tray_pose.position.y << ", "
+                             << tray_pose.position.z << "]"
+                             << "\nOrientation (rpy): [" << roll << ", "
+                             << pitch << ", " << yaw << "]"
+                             << "\n=====================================\n");
       // Erase the tray from the vector
       trays2_[curr_order_tray_id].erase(trays2_[curr_order_tray_id].begin());
       // If the vector is empty erase key from the map
@@ -497,161 +502,89 @@ void CompetitorInterface::printOrderWiseParts(Order order) {
     }
   }
   bool all_parts_found = false;
-  std::vector<ariac_msgs::msg::KittingPart> parts = order.getOrderTask().getParts();
+  std::vector<ariac_msgs::msg::KittingPart> parts =
+      order.getOrderTask().getParts();
+  std::vector<int> deleted_parts_index;
   // Print boolean result of left_bins_ empty or not
-  std::cout << "Left Bins empty: " << left_bins_.empty() << std::endl;
   if (!left_bins_.empty() && !all_parts_found) {
-    std::cout<<"Left Bins checking\n";
     for (size_t i = 0; i < parts.size(); i++) {
       unsigned int part_type = parts[i].part.type;
       unsigned int part_color = parts[i].part.color;
-      std::pair<unsigned int, unsigned int> part_key = std::make_pair(part_type, part_color);
-      std::cout << "Count left bins part_type: " << left_bins_.count(part_key) << std::endl;
+      std::pair<unsigned int, unsigned int> part_key =
+          std::make_pair(part_type, part_color);
       if (left_bins_.find(part_key) != left_bins_.end()) {
         Parts part_obj = left_bins_[part_key].front();
         geometry_msgs::msg::Pose part_pose = part_obj.getPartPose();
-        //Convert orientation from quaternion to RPY
-        tf2::Quaternion q(
-          part_pose.orientation.x,
-          part_pose.orientation.y,
-          part_pose.orientation.z,
-          part_pose.orientation.w);
+        // Convert orientation from quaternion to RPY
+        tf2::Quaternion q(part_pose.orientation.x, part_pose.orientation.y,
+                          part_pose.orientation.z, part_pose.orientation.w);
         tf2::Matrix3x3 m(q);
         double roll, pitch, yaw;
         m.getRPY(roll, pitch, yaw);
-        RCLCPP_INFO_STREAM(this->get_logger(), "\n=====================================\n" 
-        << colorMap[part_obj.getPartColor()] << " " << partMap[part_obj.getPartType()] << "\nPosition (xyz): [" << part_pose.position.x << ", " << part_pose.position.y << ", " << part_pose.position.z << "]" << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
-        << "\n=====================================\n");
+        RCLCPP_INFO_STREAM(this->get_logger(),
+                           "\n=====================================\n"
+                               << colorMap[part_obj.getPartColor()] << " "
+                               << partMap[part_obj.getPartType()]
+                               << "\nPosition (xyz): [" << part_pose.position.x
+                               << ", " << part_pose.position.y << ", "
+                               << part_pose.position.z << "]"
+                               << "\nOrientation (rpy): [" << roll << ", "
+                               << pitch << ", " << yaw << "]"
+                               << "\n=====================================\n");
         // Erase the part from the vector
         left_bins_[part_key].erase(left_bins_[part_key].begin());
         // If the vector is empty erase key from the map
         if (left_bins_[part_key].empty()) {
           left_bins_.erase(part_key);
         }
-        // Erase the found part from the vector
-        std::cout << "Which part is being erased index: " << i << "\n";
-        // parts.erase(i);
+        deleted_parts_index.push_back(i);
       }
     }
   }
+  if (deleted_parts_index.size() == parts.size()) {
+    all_parts_found = true;
+  } else {
+    for (size_t i = 0; i < deleted_parts_index.size(); i++) {
+      parts.erase(parts.begin() + deleted_parts_index[i]);
+    }
+  }
+
   // Print boolean result of right_bins_ empty or not
-  std::cout << "Right Bins empty: " << right_bins_.empty() << std::endl; 
   if (!right_bins_.empty() && !all_parts_found) {
-    std::cout<<"Right Bins checking\n";
     for (size_t i = 0; i < parts.size(); i++) {
       unsigned int part_type = parts[i].part.type;
       unsigned int part_color = parts[i].part.color;
-      std::pair<unsigned int, unsigned int> part_key = std::make_pair(part_type, part_color);
-      std::cout << "Count right bins part_type in left bins: " << right_bins_.count(part_key) << std::endl;
-      
+      std::pair<unsigned int, unsigned int> part_key =
+          std::make_pair(part_type, part_color);
+
       if (right_bins_.find(part_key) != right_bins_.end()) {
         Parts part_obj = right_bins_[part_key].front();
         geometry_msgs::msg::Pose part_pose = part_obj.getPartPose();
-        //Convert orientation from quaternion to RPY
-        tf2::Quaternion q(
-          part_pose.orientation.x,
-          part_pose.orientation.y,
-          part_pose.orientation.z,
-          part_pose.orientation.w);
+        // Convert orientation from quaternion to RPY
+        tf2::Quaternion q(part_pose.orientation.x, part_pose.orientation.y,
+                          part_pose.orientation.z, part_pose.orientation.w);
         tf2::Matrix3x3 m(q);
         double roll, pitch, yaw;
         m.getRPY(roll, pitch, yaw);
-        RCLCPP_INFO_STREAM(this->get_logger(), "\n=====================================\n" 
-        << colorMap[part_obj.getPartColor()] << " " << partMap[part_obj.getPartType()] << "\nPosition (xyz): [" << part_pose.position.x << ", " << part_pose.position.y << ", " << part_pose.position.z << "]" << "\nOrientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]"
-        << "\n=====================================\n");
+        RCLCPP_INFO_STREAM(this->get_logger(),
+                           "\n=====================================\n"
+                               << colorMap[part_obj.getPartColor()] << " "
+                               << partMap[part_obj.getPartType()]
+                               << "\nPosition (xyz): [" << part_pose.position.x
+                               << ", " << part_pose.position.y << ", "
+                               << part_pose.position.z << "]"
+                               << "\nOrientation (rpy): [" << roll << ", "
+                               << pitch << ", " << yaw << "]"
+                               << "\n=====================================\n");
         // Erase the part from the vector
         right_bins_[part_key].erase(right_bins_[part_key].begin());
         // If the vector is empty erase key from the map
         if (right_bins_[part_key].empty()) {
           right_bins_.erase(part_key);
         }
-        // Erase the found part from the vector
-        std::cout << "Which part is being erased index in right bins: " << i << "\n";
-        // parts.erase(i);
       }
     }
   }
-
-
-  // // Print everything in trays1_
-  // for (auto tray : trays1_) {
-  //   RCLCPP_INFO_STREAM(this->get_logger(), "Tray ID: " << tray.first);
-  //   for (auto tray_obj : tray.second) {
-  //     geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Position (xyz): [" << tray_pose.position.x << ", " << tray_pose.position.y << ", " << tray_pose.position.z << "]");
-  //     //Convert orientation from quaternion to RPY
-  //     tf2::Quaternion q(
-  //       tray_pose.orientation.x,
-  //       tray_pose.orientation.y,
-  //       tray_pose.orientation.z,
-  //       tray_pose.orientation.w);
-  //     tf2::Matrix3x3 m(q);
-  //     double roll, pitch, yaw;
-  //     m.getRPY(roll, pitch, yaw);
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Orientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]");
-  //   }
-  // }
-  // // Print everything in trays2_
-  // for (auto tray : trays2_) {
-  //   RCLCPP_INFO_STREAM(this->get_logger(), "Tray ID: " << tray.first);
-  //   for (auto tray_obj : tray.second) {
-  //     geometry_msgs::msg::Pose tray_pose = tray_obj.getTrayPose();
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Position (xyz): [" << tray_pose.position.x << ", " << tray_pose.position.y << ", " << tray_pose.position.z << "]");
-  //     //Convert orientation from quaternion to RPY
-  //     tf2::Quaternion q(
-  //       tray_pose.orientation.x,
-  //       tray_pose.orientation.y,
-  //       tray_pose.orientation.z,
-  //       tray_pose.orientation.w);
-  //     tf2::Matrix3x3 m(q);
-  //     double roll, pitch, yaw;
-  //     m.getRPY(roll, pitch, yaw);
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Orientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]");
-  //   }
-  // }
-  // // Print everything in left_bins_
-  // for (auto part : left_bins_) {
-  //   RCLCPP_INFO_STREAM(this->get_logger(), "Part Type: " << part.first.first << " Part Color: " << part.first.second);
-  //   for (auto part_obj : part.second) {
-  //     RCLCPP_INFO_STREAM(this->get_logger(), colorMap[part_obj.getPartColor()] << " " << partMap[part_obj.getPartType()]);
-  //     geometry_msgs::msg::Pose part_pose = part_obj.getPartPose();
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Position (xyz): [" << part_pose.position.x << ", " << part_pose.position.y << ", " << part_pose.position.z << "]");
-  //     //Convert orientation from quaternion to RPY
-  //     tf2::Quaternion q(
-  //       part_pose.orientation.x,
-  //       part_pose.orientation.y,
-  //       part_pose.orientation.z,
-  //       part_pose.orientation.w);
-  //     tf2::Matrix3x3 m(q);
-  //     double roll, pitch, yaw;
-  //     m.getRPY(roll, pitch, yaw);
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Orientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]");
-  //   }
-  // }
-  // // Print everything in right_bins_
-  // for (auto part : right_bins_) {
-  //   RCLCPP_INFO_STREAM(this->get_logger(), "Part Type: " << part.first.first << " Part Color: " << part.first.second);
-  //   for (auto part_obj : part.second) {
-  //     RCLCPP_INFO_STREAM(this->get_logger(), colorMap[part_obj.getPartColor()] << " " << partMap[part_obj.getPartType()]);
-  //     geometry_msgs::msg::Pose part_pose = part_obj.getPartPose();
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Position (xyz): [" << part_pose.position.x << ", " << part_pose.position.y << ", " << part_pose.position.z << "]");
-  //     //Convert orientation from quaternion to RPY
-  //     tf2::Quaternion q(
-  //       part_pose.orientation.x,
-  //       part_pose.orientation.y,
-  //       part_pose.orientation.z,
-  //       part_pose.orientation.w);
-  //     tf2::Matrix3x3 m(q);
-  //     double roll, pitch, yaw;
-  //     m.getRPY(roll, pitch, yaw);
-  //     RCLCPP_INFO_STREAM(this->get_logger(), "Orientation (rpy): [" << roll << ", " << pitch << ", " << yaw << "]");
-  //   }
-  // }
-  // // Print everything in parts
-  // std::vector<ariac_msgs::msg::KittingPart> parts = order.getOrderTask().getParts();
-  // for (size_t i = 0; i < parts.size(); i++) {
-  //   RCLCPP_INFO_STREAM(this->get_logger(), colorMap[parts[i].part.color] << " " << partMap[parts[i].part.type]);
-  // }
 }
 
 /**

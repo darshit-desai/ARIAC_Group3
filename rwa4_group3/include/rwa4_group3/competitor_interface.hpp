@@ -15,6 +15,15 @@
 #pragma once
 
 // Importing the required libraries
+#include <bits/stdc++.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/exceptions.h>
+#include <tf2_kdl/tf2_kdl.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
+
+#include <ariac_msgs/msg/advanced_logical_camera_image.hpp>
 #include <ariac_msgs/msg/agv_status.hpp>
 #include <ariac_msgs/msg/competition_state.hpp>
 #include <ariac_msgs/msg/kitting_part.hpp>
@@ -22,43 +31,18 @@
 #include <ariac_msgs/msg/order.hpp>
 #include <ariac_msgs/srv/move_agv.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
-#include <ariac_msgs/msg/advanced_logical_camera_image.hpp>
-
-
-#include <rclcpp/rclcpp.hpp>
-#include <rclcpp/subscription_options.hpp>
-#include <std_srvs/srv/trigger.hpp>
-#include <tf2/exceptions.h>
-#include <tf2_ros/transform_listener.h>
-#include <tf2_ros/buffer.h>
-#include <tf2/LinearMath/Quaternion.h>
-#include <tf2/LinearMath/Matrix3x3.h>
+#include <boost/functional/hash.hpp>
+#include <chrono>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
 #include <kdl/frames.hpp>
-#include <tf2_kdl/tf2_kdl.h>
-
-#include <chrono>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <bits/stdc++.h>
-#include <boost/functional/hash.hpp>
-
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp/subscription_options.hpp>
 #include <rwa4_group3/utils_interface.hpp>
-
-
-struct hash_pair {
-    template <class T1, class T2>
-    size_t operator()(const std::pair<T1, T2>& p) const {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, std::hash<T1>{}(p.first));
-        boost::hash_combine(seed, std::hash<T2>{}(p.second));
-        return seed;
-    }
-};
-
-
+#include <std_srvs/srv/trigger.hpp>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 /**
  * @brief Competitor Interface class
@@ -71,7 +55,12 @@ class CompetitorInterface : public rclcpp::Node {
    *
    */
   CompetitorInterface(std::string node_name)
-      : Node(node_name), time_interval_(500.0), received_parts_trays1_(false), received_parts_trays2_(false), received_parts_left_(false), received_parts_right_(false){
+      : Node(node_name),
+        time_interval_(500.0),
+        received_parts_trays1_(false),
+        received_parts_trays2_(false),
+        received_parts_left_(false),
+        received_parts_right_(false) {
     // Create callback group 1
     group1_ = this->create_callback_group(
         rclcpp::CallbackGroupType::MutuallyExclusive);
@@ -141,26 +130,29 @@ class CompetitorInterface : public rclcpp::Node {
         this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
             "ariac/sensors/kts1_camera/image", rclcpp::SensorDataQoS(),
             std::bind(&CompetitorInterface::kts1Callback, this,
-                      std::placeholders::_1), options4_);
+                      std::placeholders::_1),
+            options4_);
     // Create a subscribe to /ariac/sensors/kts2_camera/image
     kts2_subscriber_ =
         this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
             "ariac/sensors/kts2_camera/image", rclcpp::SensorDataQoS(),
             std::bind(&CompetitorInterface::kts2Callback, this,
-                      std::placeholders::_1), options4_);
+                      std::placeholders::_1),
+            options4_);
     // Create a subscribe to /ariac/sensors/left_bins_camera/image
     left_bins_camera_subscriber_ =
         this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
             "ariac/sensors/left_bins_camera/image", rclcpp::SensorDataQoS(),
             std::bind(&CompetitorInterface::leftBinsCameraCallback, this,
-                      std::placeholders::_1), options4_);
+                      std::placeholders::_1),
+            options4_);
     // Create a subscribe to /ariac/sensors/right_bins_camera/image
     right_bins_camera_subscriber_ =
         this->create_subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>(
             "ariac/sensors/right_bins_camera/image", rclcpp::SensorDataQoS(),
             std::bind(&CompetitorInterface::rightBinsCameraCallback, this,
-                      std::placeholders::_1), options4_); 
-       
+                      std::placeholders::_1),
+            options4_);
   }
 
  private:
@@ -195,11 +187,11 @@ class CompetitorInterface : public rclcpp::Node {
       left_bins_camera_subscriber_;  ///< Subscriber to the left bins camera
   rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
       right_bins_camera_subscriber_;  ///< Subscriber to the right bins camera
-  unsigned int agv1_location_;  ///< Location of AGV 1 class attribute
-  unsigned int agv2_location_;  ///< Location of AGV 2 class attribute
-  unsigned int agv3_location_;  ///< Location of AGV 3 class attribute
-  unsigned int agv4_location_;  ///< Location of AGV 4 class attribute
-  int competition_state_;       ///< Competition state
+  unsigned int agv1_location_;        ///< Location of AGV 1 class attribute
+  unsigned int agv2_location_;        ///< Location of AGV 2 class attribute
+  unsigned int agv3_location_;        ///< Location of AGV 3 class attribute
+  unsigned int agv4_location_;        ///< Location of AGV 4 class attribute
+  int competition_state_;             ///< Competition state
   std::vector<Order> high_priority_orders_;  ///< High priority orders list
   std::vector<Order> low_priority_orders_;   ///< Low priority orders list
   std::vector<Order> interrupted_orders_;    ///< Interrupted orders list
@@ -208,41 +200,39 @@ class CompetitorInterface : public rclcpp::Node {
   double time_interval_;  ///< Time interval for the timer callback function
   std::unordered_map<int, std::vector<Trays>> trays1_;  ///< Trays1 list
   std::unordered_map<int, std::vector<Trays>> trays2_;  ///< Trays2 list
-  std::unordered_map<std::pair<int, int>, std::vector<Parts>, hash_pair> left_bins_;  ///< Left parts list
-  std::unordered_map<std::pair<int, int>, std::vector<Parts>, hash_pair> right_bins_;  ///< Right parts list
-  bool received_parts_trays1_;                ///< Flag to check if parts are received
-  bool received_parts_trays2_;                ///< Flag to check if parts are received
-  bool received_parts_left_;                 ///< Flag to check if parts are received
-  bool received_parts_right_;                ///< Flag to check if parts are received
-  
+  std::unordered_map<std::pair<int, int>, std::vector<Parts>, hash_pair>
+      left_bins_;  ///< Left parts list
+  std::unordered_map<std::pair<int, int>, std::vector<Parts>, hash_pair>
+      right_bins_;              ///< Right parts list
+  bool received_parts_trays1_;  ///< Flag to check if parts are received
+  bool received_parts_trays2_;  ///< Flag to check if parts are received
+  bool received_parts_left_;    ///< Flag to check if parts are received
+  bool received_parts_right_;   ///< Flag to check if parts are received
+
   // Define constants
-    const uint8_t RED = 0;
-    const uint8_t GREEN = 1;
-    const uint8_t BLUE = 2;
-    const uint8_t ORANGE = 3;
-    const uint8_t PURPLE = 4;
+  const uint8_t RED = 0;
+  const uint8_t GREEN = 1;
+  const uint8_t BLUE = 2;
+  const uint8_t ORANGE = 3;
+  const uint8_t PURPLE = 4;
 
-    const uint8_t BATTERY = 10;
-    const uint8_t PUMP = 11;
-    const uint8_t SENSOR = 12;
-    const uint8_t REGULATOR = 13;
+  const uint8_t BATTERY = 10;
+  const uint8_t PUMP = 11;
+  const uint8_t SENSOR = 12;
+  const uint8_t REGULATOR = 13;
 
-    // Create a map to store part colors
-    std::map<uint8_t, std::string> colorMap = {
-        {RED, "Red"},
-        {GREEN, "Green"},
-        {BLUE, "Blue"},
-        {ORANGE, "Orange"},
-        {PURPLE, "Purple"}
-    };
+  // Create a map to store part colors
+  std::map<uint8_t, std::string> colorMap = {{RED, "Red"},
+                                             {GREEN, "Green"},
+                                             {BLUE, "Blue"},
+                                             {ORANGE, "Orange"},
+                                             {PURPLE, "Purple"}};
 
-    // Create a map to store part types
-    std::map<uint8_t, std::string> partMap = {
-        {BATTERY, "Battery"},
-        {PUMP, "Pump"},
-        {SENSOR, "Sensor"},
-        {REGULATOR, "Regulator"}
-    };
+  // Create a map to store part types
+  std::map<uint8_t, std::string> partMap = {{BATTERY, "Battery"},
+                                            {PUMP, "Pump"},
+                                            {SENSOR, "Sensor"},
+                                            {REGULATOR, "Regulator"}};
   /**
    * @brief Declaration of the callback function for the competition state
    * subscriber
@@ -325,40 +315,47 @@ class CompetitorInterface : public rclcpp::Node {
    *
    */
   void endCompetition();
-    /**
-     * @brief Declaration of the callback function for the kit tray camera sensor 1
-     *
-     * @param msg
-     */
-  void kts1Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
-    /**
-     * @brief Declaration of the callback function for the kit tray camera sensor 2
-     *
-     * @param msg
-     */
-    void kts2Callback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
-    /**
-     * @brief Declaration of the callback function for the left bins camera
-     *
-     * @param msg
-     */
-    void leftBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
-    /**
-     * @brief Declaration of the callback function for the right bins camera
-     *
-     * @param msg
-     */
-    void rightBinsCameraCallback(const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
-    /**
-     * @brief Declaration of the function to process the parts
-     *
-     * @param msg
-     */
-    geometry_msgs::msg::Pose worldFramePose(geometry_msgs::msg::Pose part_pose, geometry_msgs::msg::Pose sensor_pose);
-    /**
-     * @brief Declaration of the function to process the parts
-     *
-     * @param msg
-     */
-    void printOrderWiseParts(Order order);
+  /**
+   * @brief Declaration of the callback function for the kit tray camera sensor
+   * 1
+   *
+   * @param msg
+   */
+  void kts1Callback(
+      const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
+  /**
+   * @brief Declaration of the callback function for the kit tray camera sensor
+   * 2
+   *
+   * @param msg
+   */
+  void kts2Callback(
+      const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
+  /**
+   * @brief Declaration of the callback function for the left bins camera
+   *
+   * @param msg
+   */
+  void leftBinsCameraCallback(
+      const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
+  /**
+   * @brief Declaration of the callback function for the right bins camera
+   *
+   * @param msg
+   */
+  void rightBinsCameraCallback(
+      const ariac_msgs::msg::AdvancedLogicalCameraImage::SharedPtr msg);
+  /**
+   * @brief Declaration of the function to process the parts
+   *
+   * @param msg
+   */
+  geometry_msgs::msg::Pose worldFramePose(geometry_msgs::msg::Pose part_pose,
+                                          geometry_msgs::msg::Pose sensor_pose);
+  /**
+   * @brief Declaration of the function to process the parts
+   *
+   * @param msg
+   */
+  void printOrderWiseParts(Order order);
 };

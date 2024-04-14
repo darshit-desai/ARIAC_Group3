@@ -68,6 +68,7 @@ endif()
 # Create a variable for all dependencies
 set(FRAME_DEMO_INCLUDE_DEPENDS
   ament_cmake
+  ament_cmake_python
   rclcpp
   std_msgs
   std_srvs
