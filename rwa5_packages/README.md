@@ -16,4 +16,4 @@
 - source ros2 galactic ```source /opt/ros/galactic/setup.bash```
 - Wait for the ariac competition to be in the ready state and the moveit to be in the ready to accept commands stage and then launch the following command:
     - ```source install/setup.bash```
-    - ```ros2 launch rwa5_group3 demo_cpp.launch.py rviz:=true```
+    - ```ros2 launch rwa5_group3 rwa5_group3.launch.py rviz:=true```

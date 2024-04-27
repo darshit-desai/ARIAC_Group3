@@ -31,7 +31,6 @@ set(RWA5_GROUP3_INCLUDE_DEPENDS
   moveit_msgs
   geometric_shapes
   moveit_ros_planning_interface
-  robot_commander_msgs
 )
 
 # find all dependencies
@@ -53,13 +52,13 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 #-----------------------------
 # C++
 #-----------------------------
-add_executable(floor_robot_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
-ament_target_dependencies(floor_robot_cpp_exe ${RWA5_GROUP3_INCLUDE_DEPENDS})
-target_link_libraries(floor_robot_cpp_exe ${Boost_LIBRARIES})
+add_executable(rwa5_group3_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
+ament_target_dependencies(rwa5_group3_cpp_exe ${RWA5_GROUP3_INCLUDE_DEPENDS})
+target_link_libraries(rwa5_group3_cpp_exe ${Boost_LIBRARIES})
 
-rosidl_target_interfaces(floor_robot_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(rwa5_group3_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-install(TARGETS floor_robot_cpp_exe
+install(TARGETS rwa5_group3_cpp_exe
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -81,7 +80,7 @@ install(PROGRAMS
 )
 
 install(TARGETS
-floor_robot_cpp_exe
+rwa5_group3_cpp_exe
 DESTINATION lib/${PROJECT_NAME}
 )
 

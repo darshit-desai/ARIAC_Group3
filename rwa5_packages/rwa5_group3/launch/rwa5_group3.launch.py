@@ -18,7 +18,7 @@ from ariac_moveit_config.parameters import generate_parameters
 def launch_setup(context, *args, **kwargs):
     floor_robot_node = Node(
         package="rwa5_group3",
-        executable="floor_robot_cpp_exe",
+        executable="rwa5_group3_cpp_exe",
         output="screen",
         parameters=generate_parameters(),
     )

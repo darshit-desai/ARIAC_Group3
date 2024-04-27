@@ -13,7 +13,7 @@
 #include "utils.hpp"
 
 FloorRobot::FloorRobot()
-    : Node("floor_robot_demo_cpp"),
+    : Node("rwa5_group3_cpp"),
       floor_robot_(std::shared_ptr<rclcpp::Node>(std::move(this)),
                    "floor_robot"),
       planning_scene_()
@@ -57,7 +57,7 @@ FloorRobot::FloorRobot()
   // subscription to /ariac/competition_state
   competition_state_sub_ = this->create_subscription<ariac_msgs::msg::CompetitionState>(
       "/ariac/competition_state", 1,
-      std::bind(&FloorRobot:: , this,
+      std::bind(&FloorRobot::competition_state_cb , this,
                 std::placeholders::_1),
       competition_state_options);
 
@@ -127,166 +127,6 @@ FloorRobot::FloorRobot()
 
 //=============================================//
 FloorRobot::~FloorRobot() { floor_robot_.~MoveGroupInterface(); }
-
-//=============================================//
-bool FloorRobot::move_robot_home()
-{
-  // Move floor robot to home joint state
-  floor_robot_.setNamedTarget("home");
-  return move_to_target();
-}
-
-//=============================================//
-bool FloorRobot::move_robot_to_table(int kts)
-{
-  if (kts == robot_commander_msgs::srv::MoveRobotToTable::Request::KTS1)
-    floor_robot_.setJointValueTarget(floor_kts1_js_);
-  else if (kts == robot_commander_msgs::srv::MoveRobotToTable::Request::KTS2)
-    floor_robot_.setJointValueTarget(floor_kts2_js_);
-  else
-  {
-    RCLCPP_ERROR(get_logger(), "Invalid table number");
-    return false;
-  }
-
-  move_to_target();
-  return true;
-}
-
-//=============================================//
-bool FloorRobot::move_robot_to_tray(int tray_id,
-                                    const geometry_msgs::msg::Pose &tray_pose)
-{
-  double tray_rotation = Utils::get_yaw_from_pose(tray_pose);
-
-  std::vector<geometry_msgs::msg::Pose> waypoints;
-
-  waypoints.push_back(Utils::build_pose(
-      tray_pose.position.x, tray_pose.position.y, tray_pose.position.z + 0.2,
-      set_robot_orientation(tray_rotation)));
-  waypoints.push_back(
-      Utils::build_pose(tray_pose.position.x, tray_pose.position.y,
-                        tray_pose.position.z + pick_offset_,
-                        set_robot_orientation(tray_rotation)));
-
-  if (!move_through_waypoints(waypoints, 0.3, 0.3))
-  {
-    RCLCPP_ERROR(get_logger(), "Unable to move robot above tray");
-    return false;
-  }
-
-  // set_gripper_state(true);
-
-  wait_for_attach_completion(5.0);
-
-  if (floor_gripper_state_.attached)
-  {
-
-    std::string tray_name = "kit_tray_" + std::to_string(tray_id);
-    // add_single_model_to_planning_scene (tray_name, "kit_tray.stl",
-    //                                     tray_pose);
-
-    // Attach tray to robot in planning scene
-    floor_robot_.attachObject(tray_name);
-
-    // Move up slightly
-    waypoints.clear();
-    waypoints.push_back(Utils::build_pose(
-        tray_pose.position.x, tray_pose.position.y,
-        tray_pose.position.z + 0.2, set_robot_orientation(tray_rotation)));
-
-    if (!move_through_waypoints(waypoints, 0.2, 0.2))
-    {
-      RCLCPP_ERROR(get_logger(), "Unable to move up");
-      return false;
-    }
-    return true;
-  }
-
-  return false;
-}
-
-//=============================================//
-bool FloorRobot::move_tray_to_agv(int agv_number)
-{
-  std::vector<geometry_msgs::msg::Pose> waypoints;
-  floor_robot_.setJointValueTarget(
-      "linear_actuator_joint",
-      rail_positions_["agv" + std::to_string(agv_number)]);
-  floor_robot_.setJointValueTarget("floor_shoulder_pan_joint", 0);
-
-  if (!move_to_target())
-  {
-    RCLCPP_ERROR(get_logger(), "Unable to move tray to AGV");
-    return false;
-  }
-
-  auto agv_tray_pose = get_pose_in_world_frame(
-      "agv" + std::to_string(agv_number) + "_tray");
-  auto agv_rotation = Utils::get_yaw_from_pose(agv_tray_pose);
-
-  waypoints.clear();
-  waypoints.push_back(Utils::build_pose(
-      agv_tray_pose.position.x, agv_tray_pose.position.y,
-      agv_tray_pose.position.z + 0.3, set_robot_orientation(agv_rotation)));
-
-  waypoints.push_back(Utils::build_pose(
-      agv_tray_pose.position.x, agv_tray_pose.position.y,
-      agv_tray_pose.position.z + kit_tray_thickness_ + drop_height_,
-      set_robot_orientation(agv_rotation)));
-
-  if (!move_through_waypoints(waypoints, 0.2, 0.1))
-  {
-    RCLCPP_ERROR(get_logger(), "Unable to move tray to AGV");
-    return false;
-  }
-  return true;
-}
-
-//=============================================//
-bool FloorRobot::enter_tool_changer(std::string changing_station,
-                                    std::string gripper_type)
-{
-  usleep(10000);
-  auto tc_pose = get_pose_in_world_frame(changing_station + "_tool_changer_" + gripper_type + "_frame");
-
-  RCLCPP_INFO_STREAM(get_logger(),
-                     "Tool changer pose: " << tc_pose.position.x << ", "
-                                           << tc_pose.position.y << ", "
-                                           << tc_pose.position.z);
-  std::vector<geometry_msgs::msg::Pose> waypoints;
-  waypoints.push_back(Utils::build_pose(
-      tc_pose.position.x, tc_pose.position.y, tc_pose.position.z + 0.4,
-      set_robot_orientation(0.0)));
-
-  waypoints.push_back(
-      Utils::build_pose(tc_pose.position.x, tc_pose.position.y,
-                        tc_pose.position.z, set_robot_orientation(0.0)));
-
-  if (!move_through_waypoints(waypoints, 0.2, 0.1))
-    return false;
-
-  return true;
-}
-
-//=============================================//
-bool FloorRobot::exit_tool_changer(std::string changing_station,
-                                   std::string gripper_type)
-{
-  // Move gripper into tool changer
-  auto tc_pose = get_pose_in_world_frame(changing_station + "_tool_changer_" + gripper_type + "_frame");
-
-  std::vector<geometry_msgs::msg::Pose> waypoints;
-
-  waypoints.push_back(Utils::build_pose(
-      tc_pose.position.x, tc_pose.position.y, tc_pose.position.z + 0.4,
-      set_robot_orientation(0.0)));
-
-  if (!move_through_waypoints(waypoints, 0.2, 0.1))
-    return false;
-
-  return true;
-}
 
 //=============================================//
 bool FloorRobot::start_competition()
@@ -466,7 +306,7 @@ FloorRobot::get_pose_in_world_frame(std::string frame_id)
   }
   catch (const tf2::TransformException &ex)
   {
-    RCLCPP_ERROR(get_logger(), "Could not get transform");
+    RCLCPP_ERROR(get_logger(), "Could notsetJointValueTarget get transform");
   }
 
   pose.position.x = t.transform.translation.x;
