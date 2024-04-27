@@ -57,7 +57,7 @@ FloorRobot::FloorRobot()
   // subscription to /ariac/competition_state
   competition_state_sub_ = this->create_subscription<ariac_msgs::msg::CompetitionState>(
       "/ariac/competition_state", 1,
-      std::bind(&FloorRobot::competition_state_cb, this,
+      std::bind(&FloorRobot:: , this,
                 std::placeholders::_1),
       competition_state_options);
 

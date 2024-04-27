@@ -431,7 +431,17 @@ private:
   void add_models_to_planning_scene ();
   //-----------------------------//
 
+
+  /**
+   * @brief update kitting tray vector
+   * call the service to get kitting tray pose
+   *
+   */
   void update_kts_vector();
+  /**
+   * @brief update parts vector
+   * call the service to get parts pose from bins
+   */
   void update_parts_vector();
 
   
@@ -498,9 +508,6 @@ private:
   //! Subscriber for "/ariac/sensors/right_bins_camera/image" topic
   rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
       right_bins_camera_sub_;
-  // Orders List
-  // competitor_interfaces::msg::FloorRobotTask current_order_;
-  // std::vector<competitor_interfaces::msg::FloorRobotTask> orders_;
 
   //! State of the competition.
   /*!
@@ -564,35 +571,57 @@ private:
   bool left_bins_camera_received_data = false;
   //! Whether "right_bins_camera" has received data or not
   bool right_bins_camera_received_data = false;
-  //! Callback for "/rwa5_group3/demo" topic
+
+  /**
+   * @brief callback for floor robot
+   * 
+   * @param msg 
+   */
   void floor_robot_sub_cb (const std_msgs::msg::String::ConstSharedPtr msg);
-  //! Callback for "/ariac/orders" topic
+  /**
+   * @brief  Callback for "/ariac/orders" topic
+   * 
+   * @param msg 
+   */
   void orders_cb (const ariac_msgs::msg::Order::ConstSharedPtr msg);
-  //! Callback for "/ariac/sensors/kts1_camera/image" topic
-  void kts1_camera_cb (
-      const ariac_msgs::msg::AdvancedLogicalCameraImage::ConstSharedPtr msg);
-  //! Callback for "/ariac/sensors/kts2_camera/image" topic
-  void kts2_camera_cb (
-      const ariac_msgs::msg::AdvancedLogicalCameraImage::ConstSharedPtr msg);
-  //! Callback for "/ariac/sensors/left_bins_camera/image" topic
-  void left_bins_camera_cb (
-      const ariac_msgs::msg::AdvancedLogicalCameraImage::ConstSharedPtr msg);
-  //! Callback for "/ariac/sensors/right_bins_camera/image" topic
-  void right_bins_camera_cb (
-      const ariac_msgs::msg::AdvancedLogicalCameraImage::ConstSharedPtr msg);
-  //! Callback for "/ariac/competition_state" topic
+
+  /**
+   * @brief Callback for "/ariac/competition_state" topic
+   * 
+   * @param msg 
+   */
   void competition_state_cb (
       const ariac_msgs::msg::CompetitionState::ConstSharedPtr msg);
-  //! Callback for "/ariac/floor_robot_gripper_state" topic
+  /**
+   * @brief Callback for "/ariac/floor_robot_gripper_state" topic
+   * 
+   * @param msg 
+   */
   void floor_gripper_state_cb (
       const ariac_msgs::msg::VacuumGripperState::ConstSharedPtr msg);
-  //! Callback for "/ariac/agv1_status" topic
+  /**
+   * @brief Callback for "/ariac/agv1_status" topic
+   * 
+   * @param msg 
+   */
   void agv1_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
-  //! Callback for "/ariac/agv2_status" topic
+  /**
+   * @brief Callback for "/ariac/agv2_status" topic
+   * 
+   * @param msg 
+   */
   void agv2_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
-  //! Callback for "/ariac/agv3_status" topic
+  /**
+   * @brief Callback for "/ariac/agv3_status" topic
+   * 
+   * @param msg 
+   */
   void agv3_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
-  //! Callback for "/ariac/agv4_status" topic
+  /**
+   * @brief Callback for "/ariac/agv4_status" topic
+   * 
+   * @param msg 
+   */
   void agv4_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
 
   //! Client for "/ariac/perform_quality_check" service
@@ -692,7 +721,6 @@ private:
   std::vector<ariac_msgs::msg::Order> active_orders_; ///> attribute to store active orders
   std::vector<ariac_msgs::msg::Order> completed_orders_; ///> attribute to store completed orders
   rclcpp::CallbackGroup::SharedPtr competition_timer_cbg_; ///> callback group for competition timer
-  rclcpp::CallbackGroup::SharedPtr camera_timer_cbg_; ///> callback group for camera timer
   rclcpp::CallbackGroup::SharedPtr agv_timer_cbg_; ///> callback group for agv timer
   rclcpp::CallbackGroup::SharedPtr order_timer_cbg_; ///> callback group for order timer
   rclcpp::TimerBase::SharedPtr submit_order_timer_; ///> timer for submit order
