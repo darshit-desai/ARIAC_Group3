@@ -1,5 +1,5 @@
-#include "floor_robot_cpp_only.hpp"
 
+#include "floor_robot_cpp_only.hpp"
 #include "utils.hpp"
 
 FloorRobot::FloorRobot()

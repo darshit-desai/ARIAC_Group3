@@ -53,7 +53,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 #-----------------------------
 # C++
 #-----------------------------
-add_executable(moveit_demo_cpp_exe src/floor_robot_cpp_only.cpp src/main_cpp_only.cpp)
+add_executable(moveit_demo_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
 ament_target_dependencies(moveit_demo_cpp_exe ${MOVEIT_DEMO_INCLUDE_DEPENDS})
 target_link_libraries(moveit_demo_cpp_exe ${Boost_LIBRARIES})
 
