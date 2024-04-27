@@ -1,5 +1,15 @@
-
-#include "floor_robot_cpp_only.hpp"
+/**
+ * @file floor_robot_cpp.cpp
+ * @author Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu),
+ *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
+ * @brief 
+ * @version 0.1
+ * @date 2024-04-27
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+#include "floor_robot_cpp.hpp"
 #include "utils.hpp"
 
 FloorRobot::FloorRobot()
@@ -19,8 +29,8 @@ FloorRobot::FloorRobot()
   rclcpp::SubscriptionOptions options;
   subscription_cbg_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   options.callback_group = subscription_cbg_;
-  // subscriber callback to /moveit_demo/floor_robot/go_home topic
-  moveit_demo_sub_ = this->create_subscription<std_msgs::msg::String>(
+  // subscriber callback to /rwa5_group3/floor_robot/go_home topic
+  moveit_sub_ = this->create_subscription<std_msgs::msg::String>(
       "/rwa5_group3/floor_robot/go_home", 10,
       std::bind(&FloorRobot::floor_robot_sub_cb, this, std::placeholders::_1),
       options);
@@ -104,7 +114,7 @@ FloorRobot::FloorRobot()
       std::bind(&FloorRobot::agv4_status_cb, this, std::placeholders::_1),
       agv_status_options);
   
-  // client to moveit_demo/AdvancedCamera
+  // client to rwa5_group3/AdvancedCamera
   advanced_camera_client_ = this->create_client<rwa5_group3::srv::AdvancedCamera>(
       "advanced_camera");
 

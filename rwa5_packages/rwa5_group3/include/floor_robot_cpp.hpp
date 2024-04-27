@@ -1,3 +1,17 @@
+/**
+ * @file floor_robot_cpp.hpp
+ * @author Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu),
+ *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
+ * @brief THe following class has all the methods and attributes for the floor robot to complete only kitting tasks
+ * The code was taken from the source reference below and modified to work for RWA5.
+ * @version 0.1
+ * @date 2024-04-27
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
+
 /*! \mainpage Main page for the floor robot demo
  *
  * \section Installation
@@ -13,7 +27,6 @@
  *  \brief     Class for the floor robot.
  *  \details   The floor robot is capable of completing kitting tasks.
  *  \author    Zeid Kootbally
- *  \author    John Doe (add your teammate's name here)
  *  \version   0.1
  *  \date      July 2023
  *  \warning   Improper use can crash your application
@@ -455,8 +468,8 @@ private:
   //! TF2 listener
   std::shared_ptr<tf2_ros::TransformListener> tf_listener
       = std::make_shared<tf2_ros::TransformListener> (*tf_buffer);
-  //! Subscriber for "/moveit_demo/floor_robot/go_home" topic
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr moveit_demo_sub_;
+  //! Subscriber for "/rwa3_group5/floor_robot/go_home" topic
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr moveit_sub_;
   //! Subscriber for "/ariac/floor_robot_gripper_state" topic
   rclcpp::Subscription<ariac_msgs::msg::VacuumGripperState>::SharedPtr
       floor_gripper_state_sub_;
@@ -551,7 +564,7 @@ private:
   bool left_bins_camera_received_data = false;
   //! Whether "right_bins_camera" has received data or not
   bool right_bins_camera_received_data = false;
-  //! Callback for "/moveit_demo/demo" topic
+  //! Callback for "/rwa5_group3/demo" topic
   void floor_robot_sub_cb (const std_msgs::msg::String::ConstSharedPtr msg);
   //! Callback for "/ariac/orders" topic
   void orders_cb (const ariac_msgs::msg::Order::ConstSharedPtr msg);
@@ -591,7 +604,7 @@ private:
   //! Client for "/ariac/floor_robot_enable_gripper" service
   rclcpp::Client<ariac_msgs::srv::VacuumGripperControl>::SharedPtr
       floor_robot_gripper_enable_;
-  //! Client for "moveit_demo/advanced_camera" service
+  //! Client for "rwa5_group3/advanced_camera" service
   rclcpp::Client<rwa5_group3::srv::AdvancedCamera>::SharedPtr
       advanced_camera_client_;
   //! Thickness of the tray in meters
@@ -670,19 +683,19 @@ private:
       - UNKNOWN=99
   */
   std::map<int, int> agv_locations_
-      = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } };
+      = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } }; ///> attribute to store AGV locations
   std::unordered_map<std::tuple<int, int, int>, ariac_msgs::msg::Part, hash_pair> parts_in_tray_;
-  std::map<int, int> tray_on_agv_ = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } };
-  std::vector<ariac_msgs::msg::Order> high_priority_orders_;
-  std::vector<ariac_msgs::msg::Order> low_priority_orders_;
-  std::vector<ariac_msgs::msg::Order> interrupted_orders_;
-  std::vector<ariac_msgs::msg::Order> active_orders_;
-  std::vector<ariac_msgs::msg::Order> completed_orders_;
-  rclcpp::CallbackGroup::SharedPtr competition_timer_cbg_;
-  rclcpp::CallbackGroup::SharedPtr camera_timer_cbg_;
-  rclcpp::CallbackGroup::SharedPtr agv_timer_cbg_;
-  rclcpp::CallbackGroup::SharedPtr order_timer_cbg_;
-  rclcpp::TimerBase::SharedPtr submit_order_timer_;
+  std::map<int, int> tray_on_agv_ = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } }; ///> attribute to store tray on AGV
+  std::vector<ariac_msgs::msg::Order> high_priority_orders_; ///> attribute to store high priority orders
+  std::vector<ariac_msgs::msg::Order> low_priority_orders_; ///> attribute to store low priority orders
+  std::vector<ariac_msgs::msg::Order> interrupted_orders_; ///> attribute to store interrupted orders
+  std::vector<ariac_msgs::msg::Order> active_orders_; ///> attribute to store active orders
+  std::vector<ariac_msgs::msg::Order> completed_orders_; ///> attribute to store completed orders
+  rclcpp::CallbackGroup::SharedPtr competition_timer_cbg_; ///> callback group for competition timer
+  rclcpp::CallbackGroup::SharedPtr camera_timer_cbg_; ///> callback group for camera timer
+  rclcpp::CallbackGroup::SharedPtr agv_timer_cbg_; ///> callback group for agv timer
+  rclcpp::CallbackGroup::SharedPtr order_timer_cbg_; ///> callback group for order timer
+  rclcpp::TimerBase::SharedPtr submit_order_timer_; ///> timer for submit order
 };
 
 

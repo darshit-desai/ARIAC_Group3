@@ -18,7 +18,7 @@ include_directories(
 )
 
 # create a variable for all dependencies
-set(MOVEIT_DEMO_INCLUDE_DEPENDS
+set(RWA5_GROUP3_INCLUDE_DEPENDS
   rclcpp 
   std_msgs
   ariac_msgs
@@ -35,7 +35,7 @@ set(MOVEIT_DEMO_INCLUDE_DEPENDS
 )
 
 # find all dependencies
-foreach(dependency IN ITEMS ${MOVEIT_DEMO_INCLUDE_DEPENDS})
+foreach(dependency IN ITEMS ${RWA5_GROUP3_INCLUDE_DEPENDS})
   find_package(${dependency} REQUIRED)
 endforeach()
 
@@ -53,13 +53,13 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 #-----------------------------
 # C++
 #-----------------------------
-add_executable(moveit_demo_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
-ament_target_dependencies(moveit_demo_cpp_exe ${MOVEIT_DEMO_INCLUDE_DEPENDS})
-target_link_libraries(moveit_demo_cpp_exe ${Boost_LIBRARIES})
+add_executable(floor_robot_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
+ament_target_dependencies(floor_robot_cpp_exe ${RWA5_GROUP3_INCLUDE_DEPENDS})
+target_link_libraries(floor_robot_cpp_exe ${Boost_LIBRARIES})
 
-rosidl_target_interfaces(moveit_demo_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(floor_robot_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-install(TARGETS moveit_demo_cpp_exe
+install(TARGETS floor_robot_cpp_exe
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -75,13 +75,13 @@ ament_python_install_package(${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
-  script/floor_robot_demo.py
-  script/yolo_demo.py
+  script/floor_robot.py
+  script/yolo.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
 install(TARGETS
-moveit_demo_cpp_exe
+floor_robot_cpp_exe
 DESTINATION lib/${PROJECT_NAME}
 )
 

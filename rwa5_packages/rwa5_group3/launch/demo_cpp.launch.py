@@ -16,14 +16,14 @@ from ariac_moveit_config.parameters import generate_parameters
 
 
 def launch_setup(context, *args, **kwargs):
-    demo_cpp = Node(
+    floor_robot_node = Node(
         package="rwa5_group3",
-        executable="moveit_demo_cpp_exe",
+        executable="floor_robot_cpp_exe",
         output="screen",
         parameters=generate_parameters(),
     )
 
-    yolo_python = Node(package="rwa5_group3", executable="yolo_demo.py")
+    yolo_python_node = Node(package="rwa5_group3", executable="yolo.py")
 
     start_rviz = LaunchConfiguration("rviz")
 
@@ -53,8 +53,8 @@ def launch_setup(context, *args, **kwargs):
     )
 
     nodes_to_start = [
-        demo_cpp,
-        yolo_python
+        floor_robot_node,
+        yolo_python_node
         # rviz_node,
         # moveit
     ]

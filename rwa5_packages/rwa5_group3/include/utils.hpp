@@ -1,3 +1,16 @@
+/**
+ * @file utils.hpp
+ * @author Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu),
+ *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
+ * @brief this file contains the utility functions. These functions are used to convert between different types of poses and orientations.
+ * They don't belong to any class and are static methods.
+ * @version 0.1
+ * @date 2024-04-27
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #pragma once
 
 #include <cmath>
