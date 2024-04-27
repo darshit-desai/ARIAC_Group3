@@ -2,35 +2,14 @@
  * @file floor_robot_cpp.hpp
  * @author Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu),
  *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
- * @brief THe following class has all the methods and attributes for the floor robot to complete only kitting tasks
- * The code was taken from the source reference below and modified to work for RWA5.
+ * @brief THe following class has all the methods and attributes for the floor
+ * robot to complete only kitting tasks The code was taken from the source
+ * reference below and modified to work for RWA5.
  * @version 0.1
  * @date 2024-04-27
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
- */
-
-
-/*! \mainpage Main page for the floor robot demo
  *
- * \section Installation
- *
- * - cd ~/ariac_ws/src
- * - git clone https://github.com/zeidk/enpm663_summer2023.git -b lecture8
- * - cd ~/ariac_ws
- * - rosdep install --from-paths src -y -i --rosdistro galactic
- * - colcon build
- */
-
-/*!
- *  \brief     Class for the floor robot.
- *  \details   The floor robot is capable of completing kitting tasks.
- *  \author    Zeid Kootbally
- *  \version   0.1
- *  \date      July 2023
- *  \warning   Improper use can crash your application
- *  \copyright GNU Public License.
  */
 
 #pragma once
@@ -63,10 +42,10 @@
 #include <ariac_msgs/srv/perform_quality_check.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
+#include <rwa5_group3/srv/advanced_camera.hpp>
 #include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <std_srvs/srv/trigger.hpp>
-#include <rwa5_group3/srv/advanced_camera.hpp>
 // TF2
 #include "tf2/exceptions.h"
 #include "tf2_ros/buffer.h"
@@ -77,14 +56,13 @@
 #include <kdl/frames.hpp>
 // C++
 #include <unistd.h>
+
 #include <boost/functional/hash.hpp>
-#include <unordered_map>
-#include <string>
-#include <vector>
-#include <tuple>
-
 #include <cmath>
-
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 /**
  * @brief Define a hash function for pairs
@@ -104,8 +82,6 @@ struct hash_pair {
   }
 };
 
-
-
 #include <geometry_msgs/msg/pose.hpp>
 
 /**
@@ -115,23 +91,22 @@ struct hash_pair {
  * complete only kitting tasks
  *
  */
-class FloorRobot : public rclcpp::Node
-{
+class FloorRobot : public rclcpp::Node {
   //-----------------------------//
   // Public methods
   //-----------------------------//
-public:
+ public:
   /**
    * @brief Construct a new FloorRobot object
    *
    */
-  FloorRobot ();
+  FloorRobot();
 
   /**
    * @brief Destroy the FloorRobot object
    *
    */
-  ~FloorRobot ();
+  ~FloorRobot();
   //-----------------------------//
 
   /**
@@ -140,7 +115,7 @@ public:
    * @return true  Successfully started the competition
    * @return false  Failed to start the competition
    */
-  bool start_competition ();
+  bool start_competition();
   //-----------------------------//
 
   /**
@@ -149,7 +124,7 @@ public:
    * @return true  Successfully ended the competition
    * @return false  Failed to end the competition
    */
-  bool end_competition ();
+  bool end_competition();
   //-----------------------------//
 
   /**
@@ -159,7 +134,7 @@ public:
    * @return true  Successfully locked the tray
    * @return false  Failed to lock the tray
    */
-  bool lock_tray (int agv_num);
+  bool lock_tray(int agv_num);
   //-----------------------------//
 
   /**
@@ -170,7 +145,7 @@ public:
    * @return true  Successfully moved the AGV
    * @return false  Failed to move the AGV
    */
-  void move_agv (int agv_num, int destination);
+  void move_agv(int agv_num, int destination);
   //-----------------------------//
 
   /**
@@ -179,25 +154,24 @@ public:
    * @return true Successfully completed all the orders
    * @return false Failed to complete all the orders
    */
-  bool complete_orders ();
+  bool complete_orders();
 
   /**
    * @brief Send the floor robot to the home configuration
    */
-  bool go_home ();
+  bool go_home();
   /**
    * @brief Submit an order
    *
    * @param order_id ID of the order to submit
    */
-  void submit_order ();
+  void submit_order();
   //-----------------------------//
 
   //-----------------------------//
   // Private attributes and methods
   //-----------------------------//
-private:
-
+ private:
   /**
    * @brief Complete a single kitting task
    *
@@ -205,7 +179,7 @@ private:
    * @return true  Successfully completed the kitting task
    * @return false Failed to complete the kitting task
    */
-  bool complete_kitting_task (ariac_msgs::msg::Order order);
+  bool complete_kitting_task(ariac_msgs::msg::Order order);
   //-----------------------------//
   //-----------------------------//
 
@@ -216,7 +190,7 @@ private:
    * @return true Enable the gripper
    * @return false Disable the gripper
    */
-  bool set_gripper_state (bool status);
+  bool set_gripper_state(bool status);
   //-----------------------------//
 
   /**
@@ -233,7 +207,7 @@ private:
    * @return true Successfully changed the gripper
    * @return false Failed to change the gripper
    */
-  bool change_gripper (std::string changing_station, std::string gripper_type);
+  bool change_gripper(std::string changing_station, std::string gripper_type);
   //-----------------------------//
 
   /**
@@ -250,7 +224,7 @@ private:
    * @return true Successfully picked and placed the tray
    * @return false Failed to pick and place the tray
    */
-  bool pick_and_place_tray (int tray_id, int agv_num);
+  bool pick_and_place_tray(int tray_id, int agv_num);
   //-----------------------------//
 
   /**
@@ -260,7 +234,7 @@ private:
    * @return true  Successfully picked the part
    * @return false Failed to pick the part
    */
-  bool pick_bin_part (ariac_msgs::msg::Part part_to_pick);
+  bool pick_bin_part(ariac_msgs::msg::Part part_to_pick);
   //-----------------------------//
 
   /**
@@ -277,7 +251,7 @@ private:
    * @return true Successfully placed the part in the tray
    * @return false Failed to place the part in the tray
    */
-  bool place_part_in_tray (int agv_num, int quadrant);
+  bool place_part_in_tray(int agv_num, int quadrant);
   //-----------------------------//
 
   /**
@@ -287,7 +261,7 @@ private:
    * @return true Successfully moved to the target pose
    * @return false Failed to move to the target pose
    */
-  bool move_to_target ();
+  bool move_to_target();
   //-----------------------------//
 
   /**
@@ -299,8 +273,8 @@ private:
    * @return true  Successfully moved through the waypoints
    * @return false  Failed to move through the waypoints
    */
-  bool move_through_waypoints (std::vector<geometry_msgs::msg::Pose> waypoints,
-                               double vsf, double asf);
+  bool move_through_waypoints(std::vector<geometry_msgs::msg::Pose> waypoints,
+                              double vsf, double asf);
   //-----------------------------//
 
   /**
@@ -308,7 +282,7 @@ private:
    *
    * @param timeout Timeout in seconds
    */
-  void wait_for_attach_completion (double timeout);
+  void wait_for_attach_completion(double timeout);
   //-----------------------------//
 
   /**
@@ -316,7 +290,7 @@ private:
    *
    * @param yaw  Yaw angle in radians
    */
-  geometry_msgs::msg::Quaternion set_robot_orientation (double yaw);
+  geometry_msgs::msg::Quaternion set_robot_orientation(double yaw);
   //-----------------------------//
 
   /**
@@ -325,7 +299,7 @@ private:
    * @param frame_id Frame ID of the frame whose pose is to be found
    * @return geometry_msgs::msg::Pose  Pose of the frame in the world frame
    */
-  geometry_msgs::msg::Pose get_pose_in_world_frame (std::string frame_id);
+  geometry_msgs::msg::Pose get_pose_in_world_frame(std::string frame_id);
   //-----------------------------//
 
   /**
@@ -335,9 +309,9 @@ private:
    * @param mesh_file  Mesh file of the model
    * @param model_pose  Pose of the model
    */
-  void
-  add_single_model_to_planning_scene (std::string name, std::string mesh_file,
-                                      geometry_msgs::msg::Pose model_pose);
+  void add_single_model_to_planning_scene(std::string name,
+                                          std::string mesh_file,
+                                          geometry_msgs::msg::Pose model_pose);
   //-----------------------------//
 
   /**
@@ -347,10 +321,8 @@ private:
    * inserts, and the conveyor belt
    *
    */
-  void add_models_to_planning_scene ();
+  void add_models_to_planning_scene();
   //-----------------------------//
-
-
   /**
    * @brief update kitting tray vector
    * call the service to get kitting tray pose
@@ -362,25 +334,13 @@ private:
    * call the service to get parts pose from bins
    */
   void update_parts_vector();
-
-  
-  
+  //-----------------------------//
   // Flags for state machine
   bool competition_started_ = false;
   bool competition_ended_ = false;
   bool tray_picked_up_ = false;
   bool tray_placed_ = false;
   bool moved_home_ = false;
-  //! Timer for the main loop
-  rclcpp::TimerBase::SharedPtr main_timer_;
-  //! Main timer callback group
-  rclcpp::CallbackGroup::SharedPtr main_timer_cbg_;
-  //! Callback for the timer for the main loop
-  void main_timer_callback ();
-  //! Current order being processed
-  ariac_msgs::msg::Order current_order_;
-  //! List of received orders
-  std::vector<ariac_msgs::msg::Order> orders_;
   //! Move group interface for the floor robot
   moveit::planning_interface::MoveGroupInterface floor_robot_;
   //! Planning scene interface for the workcell
@@ -392,11 +352,11 @@ private:
   */
   trajectory_processing::TimeOptimalTrajectoryGeneration totg_;
   //! Buffer used for TF2 transforms
-  std::unique_ptr<tf2_ros::Buffer> tf_buffer
-      = std::make_unique<tf2_ros::Buffer> (get_clock ());
+  std::unique_ptr<tf2_ros::Buffer> tf_buffer =
+      std::make_unique<tf2_ros::Buffer>(get_clock());
   //! TF2 listener
-  std::shared_ptr<tf2_ros::TransformListener> tf_listener
-      = std::make_shared<tf2_ros::TransformListener> (*tf_buffer);
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener =
+      std::make_shared<tf2_ros::TransformListener>(*tf_buffer);
   //! Subscriber for "/rwa3_group5/floor_robot/go_home" topic
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr moveit_sub_;
   //! Subscriber for "/ariac/floor_robot_gripper_state" topic
@@ -415,18 +375,6 @@ private:
   //! Subscriber for "/ariac/competition_state" topic
   rclcpp::Subscription<ariac_msgs::msg::CompetitionState>::SharedPtr
       competition_state_sub_;
-  //! Subscriber for "/ariac/sensors/kts1_camera/image" topic
-  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
-      kts1_camera_sub_;
-  //! Subscriber for "/ariac/sensors/kts2_camera/image" topic
-  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
-      kts2_camera_sub_;
-  //! Subscriber for "/ariac/sensors/left_bins_camera/image" topic
-  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
-      left_bins_camera_sub_;
-  //! Subscriber for "/ariac/sensors/right_bins_camera/image" topic
-  rclcpp::Subscription<ariac_msgs::msg::AdvancedLogicalCameraImage>::SharedPtr
-      right_bins_camera_sub_;
 
   //! State of the competition.
   /*!
@@ -457,18 +405,6 @@ private:
   you prefer.
   */
   geometry_msgs::msg::Pose kts2_camera_pose_;
-  //! Pose of the camera "left_bins_camera" in the world frame
-  /*!
-  \note This attribute is set in the camera callback. You can hardcode it if
-  you prefer.
-  */
-  geometry_msgs::msg::Pose left_bins_camera_pose_;
-  //! Pose of the camera "right_bins_camera" in the world frame
-  /*!
-  \note This attribute is set in the camera callback. You can hardcode it if
-  you prefer.
-  */
-  geometry_msgs::msg::Pose right_bins_camera_pose_;
   //! Pose of trays found by "kts1_camera"
   std::vector<ariac_msgs::msg::KitTrayPose> kts1_trays_;
   //! Pose of trays found by "kts2_camera"
@@ -481,67 +417,75 @@ private:
   rclcpp::CallbackGroup::SharedPtr subscription_cbg_;
   //! Specific callback group for the state of the gripper
   rclcpp::CallbackGroup::SharedPtr gripper_cbg_;
-
-  //! Whether "kts1_camera" has received data or not
-  bool kts1_camera_received_data = false;
-  //! Whether "kts2_camera" has received data or not
-  bool kts2_camera_received_data = false;
-  //! Whether "left_bins_camera" has received data or not
-  bool left_bins_camera_received_data = false;
-  //! Whether "right_bins_camera" has received data or not
-  bool right_bins_camera_received_data = false;
+  std::vector<ariac_msgs::msg::Order>
+      high_priority_orders_;  ///> attribute to store high priority orders
+  std::vector<ariac_msgs::msg::Order>
+      low_priority_orders_;  ///> attribute to store low priority orders
+  std::vector<ariac_msgs::msg::Order>
+      interrupted_orders_;  ///> attribute to store interrupted orders
+  std::vector<ariac_msgs::msg::Order>
+      active_orders_;  ///> attribute to store active orders
+  std::vector<ariac_msgs::msg::Order>
+      completed_orders_;  ///> attribute to store completed orders
+  rclcpp::CallbackGroup::SharedPtr
+      competition_timer_cbg_;  ///> callback group for competition timer
+  rclcpp::CallbackGroup::SharedPtr
+      agv_timer_cbg_;  ///> callback group for agv timer
+  rclcpp::CallbackGroup::SharedPtr
+      order_timer_cbg_;  ///> callback group for order timer
+  rclcpp::TimerBase::SharedPtr submit_order_timer_;  ///> timer for submit order
 
   /**
    * @brief callback for floor robot
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void floor_robot_sub_cb (const std_msgs::msg::String::ConstSharedPtr msg);
+  void floor_robot_sub_cb(const std_msgs::msg::String::ConstSharedPtr msg);
   /**
    * @brief  Callback for "/ariac/orders" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void orders_cb (const ariac_msgs::msg::Order::ConstSharedPtr msg);
+  void orders_cb(const ariac_msgs::msg::Order::ConstSharedPtr msg);
 
   /**
    * @brief Callback for "/ariac/competition_state" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void competition_state_cb (
+  void competition_state_cb(
       const ariac_msgs::msg::CompetitionState::ConstSharedPtr msg);
   /**
    * @brief Callback for "/ariac/floor_robot_gripper_state" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void floor_gripper_state_cb (
+  void floor_gripper_state_cb(
       const ariac_msgs::msg::VacuumGripperState::ConstSharedPtr msg);
   /**
    * @brief Callback for "/ariac/agv1_status" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void agv1_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+  void agv1_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
   /**
    * @brief Callback for "/ariac/agv2_status" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void agv2_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+  void agv2_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
   /**
    * @brief Callback for "/ariac/agv3_status" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void agv3_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+  void agv3_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
   /**
    * @brief Callback for "/ariac/agv4_status" topic
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
-  void agv4_status_cb (const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+  void agv4_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
 
   //! Client for "/ariac/perform_quality_check" service
   rclcpp::Client<ariac_msgs::srv::PerformQualityCheck>::SharedPtr
@@ -567,59 +511,53 @@ private:
   /*! This is used to pick up a part */
   double pick_offset_ = 0.003;
   //! Mapping between part type constants and part type strings
-  std::map<int, std::string> part_types_
-      = { { ariac_msgs::msg::Part::BATTERY, "battery" },
-          { ariac_msgs::msg::Part::PUMP, "pump" },
-          { ariac_msgs::msg::Part::REGULATOR, "regulator" },
-          { ariac_msgs::msg::Part::SENSOR, "sensor" } };
+  std::map<int, std::string> part_types_ = {
+      {ariac_msgs::msg::Part::BATTERY, "battery"},
+      {ariac_msgs::msg::Part::PUMP, "pump"},
+      {ariac_msgs::msg::Part::REGULATOR, "regulator"},
+      {ariac_msgs::msg::Part::SENSOR, "sensor"}};
   //! Mapping between part color constants and part color strings
   std::map<int, std::string> part_colors_ = {
-    { ariac_msgs::msg::Part::RED, "red" },
-    { ariac_msgs::msg::Part::BLUE, "blue" },
-    { ariac_msgs::msg::Part::GREEN, "green" },
-    { ariac_msgs::msg::Part::ORANGE, "orange" },
-    { ariac_msgs::msg::Part::PURPLE, "purple" },
+      {ariac_msgs::msg::Part::RED, "red"},
+      {ariac_msgs::msg::Part::BLUE, "blue"},
+      {ariac_msgs::msg::Part::GREEN, "green"},
+      {ariac_msgs::msg::Part::ORANGE, "orange"},
+      {ariac_msgs::msg::Part::PURPLE, "purple"},
   };
   //! Mapping between part type constants and part heights
-  std::map<int, double> part_heights_
-      = { { ariac_msgs::msg::Part::BATTERY, 0.04 },
-          { ariac_msgs::msg::Part::PUMP, 0.12 },
-          { ariac_msgs::msg::Part::REGULATOR, 0.07 },
-          { ariac_msgs::msg::Part::SENSOR, 0.07 } };
+  std::map<int, double> part_heights_ = {
+      {ariac_msgs::msg::Part::BATTERY, 0.04},
+      {ariac_msgs::msg::Part::PUMP, 0.12},
+      {ariac_msgs::msg::Part::REGULATOR, 0.07},
+      {ariac_msgs::msg::Part::SENSOR, 0.07}};
   //! Mapping between quadrant type constants and offsets from the center of
   //! the tray
   std::map<int, std::pair<double, double> > quad_offsets_ = {
-    { ariac_msgs::msg::KittingPart::QUADRANT1,
-      std::pair<double, double> (-0.08, 0.12) },
-    { ariac_msgs::msg::KittingPart::QUADRANT2,
-      std::pair<double, double> (0.08, 0.12) },
-    { ariac_msgs::msg::KittingPart::QUADRANT3,
-      std::pair<double, double> (-0.08, -0.12) },
-    { ariac_msgs::msg::KittingPart::QUADRANT4,
-      std::pair<double, double> (0.08, -0.12) },
+      {ariac_msgs::msg::KittingPart::QUADRANT1,
+       std::pair<double, double>(-0.08, 0.12)},
+      {ariac_msgs::msg::KittingPart::QUADRANT2,
+       std::pair<double, double>(0.08, 0.12)},
+      {ariac_msgs::msg::KittingPart::QUADRANT3,
+       std::pair<double, double>(-0.08, -0.12)},
+      {ariac_msgs::msg::KittingPart::QUADRANT4,
+       std::pair<double, double>(0.08, -0.12)},
   };
   //! Position of the linear actuator for different configurations
-  std::map<std::string, double> rail_positions_
-      = { { "agv1", -4.5 }, { "agv2", -1.2 },   { "agv3", 1.2 },
-          { "agv4", 4.5 },  { "left_bins", 3 }, { "right_bins", -3 } };
+  std::map<std::string, double> rail_positions_ = {
+      {"agv1", -4.5}, {"agv2", -1.2},   {"agv3", 1.2},
+      {"agv4", 4.5},  {"left_bins", 3}, {"right_bins", -3}};
   //! Joint value targets for kit tray station 1
-  std::map<std::string, double> floor_kts1_js_
-      = { { "linear_actuator_joint", 4.0 },
-          { "floor_shoulder_pan_joint", 1.57 },
-          { "floor_shoulder_lift_joint", -1.57 },
-          { "floor_elbow_joint", 1.57 },
-          { "floor_wrist_1_joint", -1.57 },
-          { "floor_wrist_2_joint", -1.57 },
-          { "floor_wrist_3_joint", 0.0 } };
+  std::map<std::string, double> floor_kts1_js_ = {
+      {"linear_actuator_joint", 4.0},       {"floor_shoulder_pan_joint", 1.57},
+      {"floor_shoulder_lift_joint", -1.57}, {"floor_elbow_joint", 1.57},
+      {"floor_wrist_1_joint", -1.57},       {"floor_wrist_2_joint", -1.57},
+      {"floor_wrist_3_joint", 0.0}};
   //! Joint value targets for kit tray station 2
-  std::map<std::string, double> floor_kts2_js_
-      = { { "linear_actuator_joint", -4.0 },
-          { "floor_shoulder_pan_joint", -1.57 },
-          { "floor_shoulder_lift_joint", -1.57 },
-          { "floor_elbow_joint", 1.57 },
-          { "floor_wrist_1_joint", -1.57 },
-          { "floor_wrist_2_joint", -1.57 },
-          { "floor_wrist_3_joint", 0.0 } };
+  std::map<std::string, double> floor_kts2_js_ = {
+      {"linear_actuator_joint", -4.0},      {"floor_shoulder_pan_joint", -1.57},
+      {"floor_shoulder_lift_joint", -1.57}, {"floor_elbow_joint", 1.57},
+      {"floor_wrist_1_joint", -1.57},       {"floor_wrist_2_joint", -1.57},
+      {"floor_wrist_3_joint", 0.0}};
   //! AGV locations for different AGVs.
   /*!
       The first value is the AGV number and the second value is the location of
@@ -630,19 +568,14 @@ private:
       - WAREHOUSE=3
       - UNKNOWN=99
   */
-  std::map<int, int> agv_locations_
-      = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } }; ///> attribute to store AGV locations
-  std::unordered_map<std::tuple<int, int, int>, ariac_msgs::msg::Part, hash_pair> parts_in_tray_;
-  std::map<int, int> tray_on_agv_ = { { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 } }; ///> attribute to store tray on AGV
-  std::vector<ariac_msgs::msg::Order> high_priority_orders_; ///> attribute to store high priority orders
-  std::vector<ariac_msgs::msg::Order> low_priority_orders_; ///> attribute to store low priority orders
-  std::vector<ariac_msgs::msg::Order> interrupted_orders_; ///> attribute to store interrupted orders
-  std::vector<ariac_msgs::msg::Order> active_orders_; ///> attribute to store active orders
-  std::vector<ariac_msgs::msg::Order> completed_orders_; ///> attribute to store completed orders
-  rclcpp::CallbackGroup::SharedPtr competition_timer_cbg_; ///> callback group for competition timer
-  rclcpp::CallbackGroup::SharedPtr agv_timer_cbg_; ///> callback group for agv timer
-  rclcpp::CallbackGroup::SharedPtr order_timer_cbg_; ///> callback group for order timer
-  rclcpp::TimerBase::SharedPtr submit_order_timer_; ///> timer for submit order
+  std::map<int, int> agv_locations_ = {
+      {1, -1},
+      {2, -1},
+      {3, -1},
+      {4, -1}};  ///> attribute to store AGV locations
+  std::unordered_map<std::tuple<int, int, int>, ariac_msgs::msg::Part,
+                     hash_pair>
+      parts_in_tray_;
+  std::map<int, int> tray_on_agv_ = {
+      {1, -1}, {2, -1}, {3, -1}, {4, -1}};  ///> attribute to store tray on AGV
 };
-
-

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+"""
+File: yolo_interface.py
+Author: Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu), Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
+Date: 2024-04-27
+Description: Main file for initializing the YOLOInterface ROS node
+"""
+
 from rwa5_group3.yolo_interface import YOLOInterface
 import rclpy
 import os

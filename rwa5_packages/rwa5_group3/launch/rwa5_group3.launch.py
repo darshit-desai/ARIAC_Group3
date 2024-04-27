@@ -54,9 +54,9 @@ def launch_setup(context, *args, **kwargs):
 
     nodes_to_start = [
         floor_robot_node,
-        yolo_python_node
-        # rviz_node,
-        # moveit
+        yolo_python_node,
+        rviz_node,
+        moveit
     ]
 
     return nodes_to_start

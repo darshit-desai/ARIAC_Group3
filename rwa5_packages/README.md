@@ -9,11 +9,10 @@
 - ```colcon build --packages-select rwa5_group3```
 - ```source install/setup.bash```
 - Run the command to launch the ARIAC competition```ros2 launch ariac_gazebo ariac.launch.py competitor_pkg:=rwa5_group3 sensor_config:=rgb_sensors trial_name:=rwa5_spring2024```
-- Run the command to launch moveit ```ros2 launch ariac_moveit_config ariac_robots_moveit.launch.py```
 
 ## Open other terminal and  the following command 
 - Go the workspace root
 - source ros2 galactic ```source /opt/ros/galactic/setup.bash```
 - Wait for the ariac competition to be in the ready state and the moveit to be in the ready to accept commands stage and then launch the following command:
     - ```source install/setup.bash```
-    - ```ros2 launch rwa5_group3 rwa5_group3.launch.py rviz:=true```
+    - ```ros2 launch rwa5_group3 rwa5_group3.launch.py rviz:=true```, This will launch the competitor package, rviz and the moveit node Note: remove `rviz:=true` if you want to run without rviz.

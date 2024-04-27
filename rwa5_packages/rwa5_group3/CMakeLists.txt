@@ -74,7 +74,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
-  script/floor_robot.py
+  # script/floor_robot.py
   script/yolo.py
   DESTINATION lib/${PROJECT_NAME}
 )
