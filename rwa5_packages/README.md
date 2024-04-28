@@ -3,7 +3,7 @@
 - Install the YOLO object detection model dependencies on your Ubuntu 20.04 computer ```pip install ultralytics``` or update an existing installation by running ```pip install -U ultralytics```
 
 ## Run the following command from the root of your workspace
-- Put the trial file inside ```src/ariac/ariac_gazebo/config/trials/``` directory
+- Put the trial file inside ```~your_ws/src/ariac/ariac_gazebo/config/trials/``` directory
 - Go the workspace root in the terminal
 - ```rosdep install --from-paths src -y --ignore-src```
 - ```colcon build --packages-select rwa5_group3```
