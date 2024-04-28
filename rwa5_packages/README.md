@@ -45,3 +45,10 @@ Sat Apr 27 23:49:53 2024
 +---------------------------------------------------------------------------------------+
 
 ```
+
+## Simulation Video:
+The following video shows the execution of 3 kitting orders with a high priority order interrupting the low priority order at around 17 seconds (video time)
+
+https://github.com/darshit-desai/ARIAC_Group3/assets/36150235/4231f15f-bb5f-4892-bf71-093cda9d9b6f
+
+
