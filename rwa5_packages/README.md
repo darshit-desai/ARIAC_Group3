@@ -16,3 +16,32 @@
 - Wait for the ariac competition to be in the ready state and the moveit to be in the ready to accept commands stage and then launch the following command:
     - ```source install/setup.bash```
     - ```ros2 launch rwa5_group3 rwa5_group3.launch.py rviz:=true```, This will launch the competitor package, rviz and the moveit node Note: remove `rviz:=true` if you want to run without rviz.
+
+## GPU workload during a complete order run:
+
+- Note: A minimum of 2 GB of GPU VRAM is required to run the complete simulation, Please ensure hardware specifications before jumping to simulation. The below screenshot is from one of the simulation runs show 1.8 GBs of VRAM usage on a RTX4070Ti GPU.
+
+```BASH
+Every 0.5s: nvidia-smi                 swarm-Alienware-Aurora-R16: Sat Apr 27 23:49:53 2024
+
+Sat Apr 27 23:49:53 2024
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.129.03             Driver Version: 535.129.03   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 4070        On  | 00000000:01:00.0  On |                  N/A |
+| 31%   37C    P2              39W / 200W |   1643MiB / 12282MiB |     17%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
++---------------------------------------------------------------------------------------+
+
+```

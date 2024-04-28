@@ -126,28 +126,6 @@ class FloorRobot : public rclcpp::Node {
    */
   bool end_competition();
   //-----------------------------//
-
-  /**
-   * @brief Lock tray on the AGV
-   *
-   * @param agv_num  Number of the AGV to lock the tray on
-   * @return true  Successfully locked the tray
-   * @return false  Failed to lock the tray
-   */
-  bool lock_tray(int agv_num);
-  //-----------------------------//
-
-  /**
-   * @brief Move an AGV to a location
-   *
-   * @param agv_num  Number of the AGV to move
-   * @param destination  Destination to move the AGV to
-   * @return true  Successfully moved the AGV
-   * @return false  Failed to move the AGV
-   */
-  void move_agv(int agv_num, int destination);
-  //-----------------------------//
-
   /**
    * @brief Complete all the announced orders
    *
@@ -172,6 +150,25 @@ class FloorRobot : public rclcpp::Node {
   // Private attributes and methods
   //-----------------------------//
  private:
+  /**
+   * @brief Lock tray on the AGV
+   *
+   * @param agv_num  Number of the AGV to lock the tray on
+   * @return true  Successfully locked the tray
+   * @return false  Failed to lock the tray
+   */
+  bool lock_tray(int agv_num);
+  //-----------------------------//
+
+  /**
+   * @brief Move an AGV to a location
+   *
+   * @param agv_num  Number of the AGV to move
+   * @param destination  Destination to move the AGV to
+   * @return true  Successfully moved the AGV
+   * @return false  Failed to move the AGV
+   */
+  void move_agv(int agv_num, int destination);
   /**
    * @brief Complete a single kitting task
    *
