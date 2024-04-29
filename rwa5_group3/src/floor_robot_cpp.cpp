@@ -894,9 +894,10 @@ bool FloorRobot::complete_orders() {
     // Check if competition ended
     if (competition_state_ == ariac_msgs::msg::CompetitionState::ENDED) {
       // Add a 1 second delay
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-      success = false;
-      // break;
+      RCLCPP_INFO_STREAM(get_logger(),
+                         "Competition ended, all tasks are completed, you can "
+                         "now kill this app using Ctrl+C");
+      std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     // all orders vectors are empty wait for orders
     else if (high_priority_orders_.size() == 0 &&
@@ -1031,11 +1032,11 @@ void FloorRobot::update_parts_vector() {
   result_part_update.wait();
   if (!result_part_update.get()->response_left_bins &&
       !result_part_update.get()->response_right_bins) {
-    RCLCPP_INFO_STREAM(get_logger(),
-                       "==================================================");
-    RCLCPP_INFO_STREAM(get_logger(), "Woops! PART UPDATE FAILED CHECK CODE");
-    RCLCPP_INFO_STREAM(get_logger(),
-                       "==================================================");
+    RCLCPP_INFO_STREAM(
+        get_logger(),
+        "\n==================================================\n"
+            << "\nWoops! PART UPDATE FAILED CHECK CODE"
+            << "\n==================================================\n");
   } else {
     left_bins_parts_ = result_part_update.get()->left_bins.part_poses;
     right_bins_parts_ = result_part_update.get()->right_bins.part_poses;
@@ -1052,11 +1053,11 @@ void FloorRobot::update_kts_vector() {
   result_kts_update.wait();
   if (!result_kts_update.get()->response_kts1 &&
       !result_kts_update.get()->response_kts2) {
-    RCLCPP_INFO_STREAM(get_logger(),
-                       "==================================================");
-    RCLCPP_INFO_STREAM(get_logger(), "Woops! PART UPDATE FAILED CHECK CODE");
-    RCLCPP_INFO_STREAM(get_logger(),
-                       "==================================================");
+    RCLCPP_INFO_STREAM(
+        get_logger(),
+        "\n==================================================\n"
+            << "\nWoops! PART UPDATE FAILED CHECK CODE"
+            << "\n==================================================\n");
   } else {
     kts1_trays_ = result_kts_update.get()->kts1.tray_poses;
     kts2_trays_ = result_kts_update.get()->kts2.tray_poses;
@@ -1070,11 +1071,11 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
   if (order.priority == 0) {
     // go_home();
     if (!high_priority_orders_.empty()) {
-      RCLCPP_INFO_STREAM(get_logger(),
-                         "==================================================");
-      RCLCPP_INFO_STREAM(get_logger(), "Woops! Order interrupted at go_home");
-      RCLCPP_INFO_STREAM(get_logger(),
-                         "==================================================");
+      RCLCPP_INFO_STREAM(
+          get_logger(),
+          "\n==================================================\n"
+              << "\nWoops! Order interrupted at go_home"
+              << "\n==================================================\n");
       return false;
     }
     if (tray_on_agv_[order.kitting_task.agv_number] !=
@@ -1086,23 +1087,21 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
         FloorRobot::update_kts_vector();
       } else {
         RCLCPP_INFO_STREAM(
-            get_logger(), "==================================================");
-        RCLCPP_INFO_STREAM(get_logger(),
-                           "Woops! Order interrupted at pick_and_place_tray "
-                           "after gripper change");
-        RCLCPP_INFO_STREAM(
-            get_logger(), "==================================================");
+            get_logger(),
+            "\n==================================================\n"
+                << "\nWoops! Order interrupted at pick_and_place_tray "
+                   "after gripper change"
+                << "\n==================================================\n");
         return false;
       }
     }
     if (!high_priority_orders_.empty()) {
-      RCLCPP_INFO_STREAM(get_logger(),
-                         "==================================================");
-      RCLCPP_INFO_STREAM(get_logger(),
-                         "Woops! Order interrupted at pick_and_place_tray "
-                         "after Putting THE LOW PRIORITY TRAY");
-      RCLCPP_INFO_STREAM(get_logger(),
-                         "==================================================");
+      RCLCPP_INFO_STREAM(
+          get_logger(),
+          "\n==================================================\n"
+              << "\nWoops! Order interrupted at pick_and_place_tray "
+                 "after Putting THE LOW PRIORITY TRAY"
+              << "\n==================================================\n");
       return false;
     }
 
@@ -1121,11 +1120,10 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
       FloorRobot::update_parts_vector();
       if (!high_priority_orders_.empty()) {
         RCLCPP_INFO_STREAM(
-            get_logger(), "==================================================");
-        RCLCPP_INFO_STREAM(get_logger(),
-                           "Woops! Order interrupted at pick_bin_part");
-        RCLCPP_INFO_STREAM(
-            get_logger(), "==================================================");
+            get_logger(),
+            "\n==================================================\n"
+                << "\nWoops! Order interrupted at pick_bin_part"
+                << "\n==================================================\n");
         return false;
       }
     }
