@@ -203,9 +203,6 @@ void FloorRobot::move_agv(int agv_num, int destination) {
   request->location = destination;
 
   auto result = client->async_send_request(request);
-  // result.wait();
-
-  // return result.get()->success;
 }
 
 //=============================================//
@@ -234,7 +231,6 @@ void FloorRobot::agv4_status_cb(
 
 //=============================================//
 void FloorRobot::orders_cb(const ariac_msgs::msg::Order::ConstSharedPtr msg) {
-  // orders_.push_back(*msg);
   if (msg->priority == true) {
     RCLCPP_INFO_STREAM(
         this->get_logger(),
@@ -272,8 +268,6 @@ void FloorRobot::competition_state_cb(
 void FloorRobot::floor_gripper_state_cb(
     const ariac_msgs::msg::VacuumGripperState::ConstSharedPtr msg) {
   floor_gripper_state_ = *msg;
-  // RCLCPP_INFO_STREAM(get_logger(), "Floor gripper state: " <<
-  // floor_gripper_state_.attached);
 }
 
 geometry_msgs::msg::Pose FloorRobot::get_pose_in_world_frame(
@@ -491,9 +485,6 @@ void FloorRobot::wait_for_attach_completion(double timeout) {
     move_through_waypoints(waypoints, 0.1, 0.1);
 
     usleep(200);
-
-    // if (floor_gripper_state_.attached)
-    //     return;
 
     if (now() - start > rclcpp::Duration::from_seconds(timeout)) {
       RCLCPP_ERROR(get_logger(), "Unable to pick up object");
@@ -716,7 +707,6 @@ bool FloorRobot::pick_bin_part(ariac_msgs::msg::Part part_to_pick) {
   for (auto part : left_bins_parts_) {
     if (part.part.type == part_to_pick.type &&
         part.part.color == part_to_pick.color) {
-      // part_pose = Utils::multiply_poses(left_bins_camera_pose_, part.pose);
       part_pose = part.pose;
       found_part = true;
       bin_side = "left_bins";
@@ -737,8 +727,6 @@ bool FloorRobot::pick_bin_part(ariac_msgs::msg::Part part_to_pick) {
     for (auto part : right_bins_parts_) {
       if (part.part.type == part_to_pick.type &&
           part.part.color == part_to_pick.color) {
-        // part_pose = Utils::multiply_poses(right_bins_camera_pose_,
-        // part.pose);
         part_pose = part.pose;
         found_part = true;
         bin_side = "right_bins";
@@ -906,7 +894,6 @@ bool FloorRobot::complete_orders() {
       if (competition_state_ !=
               ariac_msgs::msg::CompetitionState::ORDER_ANNOUNCEMENTS_DONE &&
           competition_state_ != ariac_msgs::msg::CompetitionState::ENDED) {
-        // go_home();
         // wait for more orders
         RCLCPP_INFO(get_logger(), "Waiting for orders...");
         while (high_priority_orders_.size() == 0 &&
@@ -923,7 +910,6 @@ bool FloorRobot::complete_orders() {
         if (!success) {
           success = FloorRobot::end_competition();
           success = true;
-          // break;
         }
       }
     }
@@ -979,22 +965,18 @@ void FloorRobot::submit_order() {
     if (order.kitting_task.agv_number == 1) {
       if (agv_locations_[1] == ariac_msgs::msg::AGVStatus::WAREHOUSE) {
         order_id = order.id;
-        // completed_orders_.erase(completed_orders_.begin());
       }
     } else if (order.kitting_task.agv_number == 2) {
       if (agv_locations_[2] == ariac_msgs::msg::AGVStatus::WAREHOUSE) {
         order_id = order.id;
-        // completed_orders_.erase(completed_orders_.begin());
       }
     } else if (order.kitting_task.agv_number == 3) {
       if (agv_locations_[3] == ariac_msgs::msg::AGVStatus::WAREHOUSE) {
         order_id = order.id;
-        // completed_orders_.erase(completed_orders_.begin());
       }
     } else if (order.kitting_task.agv_number == 4) {
       if (agv_locations_[4] == ariac_msgs::msg::AGVStatus::WAREHOUSE) {
         order_id = order.id;
-        // completed_orders_.erase(completed_orders_.begin());
       }
     }
   }
@@ -1130,17 +1112,11 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
   }
   // For high priority orders
   else {
-    // go_home();
     pick_and_place_tray(order.kitting_task.tray_id,
                         order.kitting_task.agv_number);
     FloorRobot::update_kts_vector();
     tray_on_agv_[order.kitting_task.agv_number] = order.kitting_task.tray_id;
     for (auto kit_part : order.kitting_task.parts) {
-      // if (parts_in_tray_.find(std::make_pair(order.kitting_task.tray_id,
-      // kit_part.quadrant)) != parts_in_tray_.end())
-      // {
-      //   continue;
-      // }
       parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
                                      order.kitting_task.tray_id,
                                      kit_part.quadrant)] = kit_part.part;
