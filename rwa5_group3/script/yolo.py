@@ -10,6 +10,7 @@ Description: Main file for initializing the YOLOInterface ROS node
 from rwa5_group3.yolo_interface import YOLOInterface
 import rclpy
 import os
+import torch
 
 
 def main(args=None):
@@ -19,6 +20,7 @@ def main(args=None):
     Args:
         args (list, optional): Command-line arguments passed to the node. Defaults to None.
     """
+    torch.cuda.empty_cache()
     # Get the current directory of the script
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
@@ -35,11 +37,12 @@ def main(args=None):
     except KeyboardInterrupt:
         # Log a message when the node is manually terminated
         node.get_logger().warn("Keyboard interrupt detected")
+        torch.cuda.empty_cache()
     finally:
         # Cleanly destroy the node instance
         node.destroy_node()
         # Shut down the ROS 2 Python client library
-        rclpy.shPROJECT_NAMEutdown()
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":

@@ -111,11 +111,26 @@ sensors:
   
 
   
-  # right_bins_logical_camera:
-  #   type: basic_logical_camera
-  #   pose:
-  #     xyz: [-2.286, 2.96, 1.8]
-  #     rpy: [pi, pi/2, 0]
+  agv1_advanced_logical_camera:
+    type: advanced_logical_camera
+    pose:
+      xyz: [-2.07, 4.8, 1.238667]
+      rpy: [pi, pi/2, 0]
+  agv2_advanced_logical_camera:
+    type: advanced_logical_camera
+    pose:
+      xyz: [-2.07, 1.2, 1.238667]
+      rpy: [pi, pi/2, 0]
+  agv3_advanced_logical_camera:
+    type: advanced_logical_camera
+    pose:
+      xyz: [-2.07, -1.2, 1.238667]
+      rpy: [pi, pi/2, 0]
+  agv4_advanced_logical_camera:
+    type: advanced_logical_camera
+    pose:
+      xyz: [-2.07, -4.8, 1.238667]
+      rpy: [pi, pi/2, 0]
 
   # left_bins_camera:
   #   type: advanced_logical_camera

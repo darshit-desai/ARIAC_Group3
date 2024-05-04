@@ -1,11 +1,23 @@
 bool request_bins
 bool request_kts
+bool request_agv1
+bool request_agv2
+bool request_agv3
+bool request_agv4
 ---
 bool response_left_bins
 bool response_right_bins
 bool response_kts1
 bool response_kts2
+bool response_agv1
+bool response_agv2
+bool response_agv3
+bool response_agv4
 ariac_msgs/AdvancedLogicalCameraImage left_bins
 ariac_msgs/AdvancedLogicalCameraImage right_bins
 ariac_msgs/AdvancedLogicalCameraImage kts1
 ariac_msgs/AdvancedLogicalCameraImage kts2
+ariac_msgs/AdvancedLogicalCameraImage agv1_parts
+ariac_msgs/AdvancedLogicalCameraImage agv2_parts
+ariac_msgs/AdvancedLogicalCameraImage agv3_parts
+ariac_msgs/AdvancedLogicalCameraImage agv4_parts
