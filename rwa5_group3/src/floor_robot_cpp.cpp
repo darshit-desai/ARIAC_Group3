@@ -877,7 +877,7 @@ bool FloorRobot::place_part_in_tray(int agv_num, int quadrant) {
         get_logger(),
         "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
         <<"\n\n"
-            << "\nPart got dropped while picking from bin attempting to pick up again"
+            << "\nPart got dropped while placing in tray attempting to pick up again"
           << "\n\n"  
             << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     // Update the parts vector since it might have dropped the part on the bins
@@ -1114,6 +1114,34 @@ void FloorRobot::update_kts_vector() {
     kts2_camera_pose_ = result_kts_update.get()->kts2.sensor_pose;
   }
 }
+// Function to update AGV parts and find changed part
+void FloorRobot::updateAGVPartsAndFindChangedPart(
+    std::vector<ariac_msgs::msg::PartPose>& agv_parts,
+    const std::vector<ariac_msgs::msg::PartPose>& result_agv_parts,
+    ariac_msgs::msg::PartPose& changed_part,
+    int& agv_change_number,
+    int agv_number) {
+
+    if (agv_parts.size() != result_agv_parts.size()) {
+        std::vector<ariac_msgs::msg::PartPose> temp_list = result_agv_parts;
+        for (size_t i = 0; i < agv_parts.size(); ++i) {
+            for (auto it = temp_list.begin(); it != temp_list.end();) {
+                if (agv_parts[i].part.type == it->part.type &&
+                    agv_parts[i].part.color == it->part.color) {
+                    it = temp_list.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+        if (!temp_list.empty()) {
+            changed_part = temp_list[0];
+            agv_parts = result_agv_parts;
+            agv_change_number = agv_number;
+        }
+    }
+}
+
 
 void FloorRobot::update_agv_vector() {
   auto agv_update_request =
@@ -1136,102 +1164,14 @@ void FloorRobot::update_agv_vector() {
         "\n==================================================\n"
             << "\nWoops! PART UPDATE FAILED CHECK CODE"
             << "\n==================================================\n");
-  } else {
+  } 
+else {
     agv_change_number_ = 0;
-    if(agv1_parts_.size() != result_agv_update.get()->agv1_parts.part_poses.size())
-    {
-      std::vector<ariac_msgs::msg::PartPose> temp_list = result_agv_update.get()->agv1_parts.part_poses;
-      for (size_t i = 0; i < agv1_parts_.size(); i++)
-      {
-        size_t v_size = temp_list.size();
-        for (size_t j = 0; j < v_size; j++)
-        {
-          if (agv1_parts_[i].part.type == temp_list[j].part.type && agv1_parts_[i].part.color == temp_list[j].part.color)
-          {
-            temp_list.erase(temp_list.begin() + j);
-            break;
-          }
-        }
-      }
-      if (temp_list.size() > 0)
-      {
-        agv1_changed_part_ = temp_list[0];
-        agv1_parts_ = result_agv_update.get()->agv1_parts.part_poses;
-        agv_change_number_ = 1;
-      }
-      
-    }
-    if(agv2_parts_.size() != result_agv_update.get()->agv2_parts.part_poses.size())
-    {
-      std::vector<ariac_msgs::msg::PartPose> temp_list = result_agv_update.get()->agv2_parts.part_poses;
-      for (size_t i = 0; i < agv2_parts_.size(); i++)
-      {
-        size_t v_size = temp_list.size();
-        for (size_t j = 0; j < v_size; j++)
-        {
-          if (agv2_parts_[i].part.type == temp_list[j].part.type && agv2_parts_[i].part.color == temp_list[j].part.color)
-          {
-            temp_list.erase(temp_list.begin() + j);
-            break;
-          }
-        }
-      }
-      if (temp_list.size() > 0)
-      {
-        agv2_changed_part_ = temp_list[0];
-        agv2_parts_ = result_agv_update.get()->agv2_parts.part_poses;
-        agv_change_number_ = 2;
-      }
-    }
-    if(agv3_parts_.size() != result_agv_update.get()->agv3_parts.part_poses.size())
-    {
-      std::vector<ariac_msgs::msg::PartPose> temp_list = result_agv_update.get()->agv3_parts.part_poses;
-      for (size_t i = 0; i < agv3_parts_.size(); i++)
-      {
-        size_t v_size = temp_list.size();
-        for (size_t j = 0; j < v_size; j++)
-        {
-          if (agv3_parts_[i].part.type == temp_list[j].part.type && agv3_parts_[i].part.color == temp_list[j].part.color)
-          {
-            temp_list.erase(temp_list.begin() + j);
-            break;
-          }
-        }
-      }
-      if (temp_list.size() > 0)
-      {
-        agv3_changed_part_ = temp_list[0];
-        agv3_parts_ = result_agv_update.get()->agv3_parts.part_poses;
-        agv_change_number_ = 3;
-      }
-    }
-    if(agv4_parts_.size() != result_agv_update.get()->agv4_parts.part_poses.size())
-    {
-      std::vector<ariac_msgs::msg::PartPose> temp_list = result_agv_update.get()->agv4_parts.part_poses;
-      for (size_t i = 0; i < agv4_parts_.size(); i++)
-      {
-        size_t v_size = temp_list.size();
-        for (size_t j = 0; j < v_size; j++)
-        {
-          if (agv4_parts_[i].part.type == temp_list[j].part.type && agv4_parts_[i].part.color == temp_list[j].part.color)
-          {
-            temp_list.erase(temp_list.begin() + j);
-            break;
-          }
-        }
-      }
-      if (temp_list.size() > 0)
-      {
-        agv4_changed_part_ = temp_list[0];
-        agv4_parts_ = result_agv_update.get()->agv4_parts.part_poses;
-        agv_change_number_ = 4;
-      }
-    }
-    // agv1_parts_ = result_agv_update.get()->agv1_parts.part_poses;
-    // agv2_parts_ = result_agv_update.get()->agv2_parts.part_poses;
-    // agv3_parts_ = result_agv_update.get()->agv3_parts.part_poses;
-    // agv4_parts_ = result_agv_update.get()->agv4_parts.part_poses;
-  }
+    FloorRobot::updateAGVPartsAndFindChangedPart(agv1_parts_, result_agv_update.get()->agv1_parts.part_poses, agv1_changed_part_, agv_change_number_, 1);
+    FloorRobot::updateAGVPartsAndFindChangedPart(agv2_parts_, result_agv_update.get()->agv2_parts.part_poses, agv2_changed_part_, agv_change_number_, 2);
+    FloorRobot::updateAGVPartsAndFindChangedPart(agv3_parts_, result_agv_update.get()->agv3_parts.part_poses, agv3_changed_part_, agv_change_number_, 3);
+    FloorRobot::updateAGVPartsAndFindChangedPart(agv4_parts_, result_agv_update.get()->agv4_parts.part_poses, agv4_changed_part_, agv_change_number_, 4);
+}
 }
 
 //=============================================//
@@ -1345,7 +1285,7 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
             } else if (agv_change_number_ == 3) {
               if (FloorRobot::pick_dropped_part_from_agv(3, agv3_changed_part_)) {
                 place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant);
-                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_cahnumber,
                                             order.kitting_task.tray_id,
                                             kit_part.quadrant)] = kit_part.part;
               } else {
