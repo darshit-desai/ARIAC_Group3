@@ -1280,8 +1280,80 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
         continue;
       }
       FloorRobot::update_agv_vector();
-      bool pick_result = pick_bin_part(kit_part.part);
+      bool pick_result = true;
+      bool agv_result = false;
+      bool bin_result = false;
       // Check part dropped after picking the part from the bin
+      while(pick_result==true && (agv_result==false || bin_result==false)){
+      if (pick_bin_part(kit_part.part)){
+        if(!place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant)){
+            if (agv_change_number_ == 1) {
+              if (FloorRobot::pick_dropped_part_from_agv(1, agv1_changed_part_) && place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant)) {
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                                            order.kitting_task.tray_id,
+                                            kit_part.quadrant)] = kit_part.part;
+                                            agv_result = true;
+              }  
+              else{
+                agv_result = false;
+              }                              
+            } else if (agv_change_number_ == 2) {
+              if (FloorRobot::pick_dropped_part_from_agv(2, agv2_changed_part_) && place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant)) {
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                                            order.kitting_task.tray_id,
+                                            kit_part.quadrant)] = kit_part.part;
+                                            agv_result = true;                
+              } else{
+                agv_result = false;
+              }  
+            } else if (agv_change_number_ == 3) {
+              if (FloorRobot::pick_dropped_part_from_agv(3, agv3_changed_part_) && place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant)) {
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                                            order.kitting_task.tray_id,
+                                            kit_part.quadrant)] = kit_part.part;
+                                            agv_result = true;
+              }   
+              else{
+                agv_result = false;
+              }         
+            } else if (agv_change_number_ == 4) {
+              if (FloorRobot::pick_dropped_part_from_agv(4, agv4_changed_part_) && place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant)) {
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                                            order.kitting_task.tray_id,
+                                            kit_part.quadrant)] = kit_part.part;
+                                            agv_result = true;
+              } 
+              else{
+                agv_result = false;
+              }  
+            }
+          }
+          // if not able to pick part from agv try bins
+          // when can this false and I dont want to go in this condition
+          if(agv_result == false){ {
+            // Remove part from the gripper and planning scene
+            std::string part_name = part_colors_[floor_robot_attached_part_.color] + "_" +
+                                    part_types_[floor_robot_attached_part_.type];
+            floor_robot_.detachObject(part_name);
+            planning_scene_.removeCollisionObjects({part_name});
+            FloorRobot::update_parts_vector();
+            bool picked_part = pick_bin_part(kit_part.part);
+            if (picked_part) {
+              place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant);
+              parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
+                                          order.kitting_task.tray_id,
+                                          kit_part.quadrant)] = kit_part.part;
+                            bin_result = true;
+            }
+            else{
+              bin_result = false;
+            }
+          }
+      }
+      else{
+        pick_result = false;
+      }
+      }
       if (!floor_gripper_state_.attached) {
         RCLCPP_INFO_STREAM(
             get_logger(),
