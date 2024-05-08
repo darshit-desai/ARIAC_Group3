@@ -514,7 +514,7 @@ class FloorRobot : public rclcpp::Node {
   bool pick_dropped_part_from_agv(int agv_num, ariac_msgs::msg::PartPose part_to_pick);
 
   // Function to update AGV parts and find changed part
-void FloorRobot::updateAGVPartsAndFindChangedPart(
+void updateAGVPartsAndFindChangedPart(
     std::vector<ariac_msgs::msg::PartPose>& agv_parts,
     const std::vector<ariac_msgs::msg::PartPose>& result_agv_parts,
     ariac_msgs::msg::PartPose& changed_part,

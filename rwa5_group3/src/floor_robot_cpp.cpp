@@ -1285,7 +1285,7 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
             } else if (agv_change_number_ == 3) {
               if (FloorRobot::pick_dropped_part_from_agv(3, agv3_changed_part_)) {
                 place_part_in_tray(order.kitting_task.agv_number, kit_part.quadrant);
-                parts_in_tray_[std::make_tuple(order.kitting_task.agv_cahnumber,
+                parts_in_tray_[std::make_tuple(order.kitting_task.agv_number,
                                             order.kitting_task.tray_id,
                                             kit_part.quadrant)] = kit_part.part;
               } else {
