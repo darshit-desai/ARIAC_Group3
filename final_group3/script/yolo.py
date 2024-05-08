@@ -7,7 +7,7 @@ Date: 2024-04-27
 Description: Main file for initializing the YOLOInterface ROS node
 """
 
-from rwa5_group3.yolo_interface import YOLOInterface
+from final_group3.yolo_interface import YOLOInterface
 import rclpy
 import os
 import torch

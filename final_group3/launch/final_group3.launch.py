@@ -18,18 +18,18 @@ from ariac_moveit_config.parameters import generate_parameters
 
 def launch_setup(context, *args, **kwargs):
     floor_robot_node = Node(
-        package="rwa5_group3",
-        executable="rwa5_group3_cpp_exe",
+        package="final_group3",
+        executable="final_group3_cpp_exe",
         output="screen",
         parameters=generate_parameters(),
     )
 
-    yolo_python_node = Node(package="rwa5_group3", executable="yolo.py", output="screen")
+    yolo_python_node = Node(package="final_group3", executable="yolo.py", output="screen")
 
     start_rviz = LaunchConfiguration("rviz")
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("rwa5_group3"), "rviz", "rwa5_group3.rviz"]
+        [FindPackageShare("final_group3"), "rviz", "final_group3.rviz"]
     )
 
     rviz_node = Node(

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(rwa5_group3)
+project(final_group3)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -18,7 +18,7 @@ include_directories(
 )
 
 # create a variable for all dependencies
-set(RWA5_GROUP3_INCLUDE_DEPENDS
+set(FINAL_GROUP3_INCLUDE_DEPENDS
   rclcpp 
   std_msgs
   ariac_msgs
@@ -34,7 +34,7 @@ set(RWA5_GROUP3_INCLUDE_DEPENDS
 )
 
 # find all dependencies
-foreach(dependency IN ITEMS ${RWA5_GROUP3_INCLUDE_DEPENDS})
+foreach(dependency IN ITEMS ${FINAL_GROUP3_INCLUDE_DEPENDS})
   find_package(${dependency} REQUIRED)
 endforeach()
 
@@ -52,13 +52,13 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 #-----------------------------
 # C++
 #-----------------------------
-add_executable(rwa5_group3_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
-ament_target_dependencies(rwa5_group3_cpp_exe ${RWA5_GROUP3_INCLUDE_DEPENDS})
-target_link_libraries(rwa5_group3_cpp_exe ${Boost_LIBRARIES})
+add_executable(final_group3_cpp_exe src/floor_robot_cpp.cpp src/main.cpp)
+ament_target_dependencies(final_group3_cpp_exe ${FINAL_GROUP3_INCLUDE_DEPENDS})
+target_link_libraries(final_group3_cpp_exe ${Boost_LIBRARIES})
 
-rosidl_target_interfaces(rwa5_group3_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(final_group3_cpp_exe ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
-install(TARGETS rwa5_group3_cpp_exe
+install(TARGETS final_group3_cpp_exe
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -79,7 +79,7 @@ install(PROGRAMS
 )
 
 install(TARGETS
-rwa5_group3_cpp_exe
+final_group3_cpp_exe
 DESTINATION lib/${PROJECT_NAME}
 )
 

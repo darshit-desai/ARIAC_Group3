@@ -22,7 +22,7 @@ from cv_bridge import CvBridge
 import cv2
 from matplotlib import pyplot as plt
 from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
-from rwa5_group3.srv import AdvancedCamera
+from final_group3.srv import AdvancedCamera
 
 """Class for parsing RGB camera & logical camera inputs and give out poses"""
 

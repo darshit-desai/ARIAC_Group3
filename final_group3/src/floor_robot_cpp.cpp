@@ -14,7 +14,7 @@
 #include "utils.hpp"
 
 FloorRobot::FloorRobot()
-    : Node("rwa5_group3_cpp"),
+    : Node("final_group3_cpp"),
       floor_robot_(std::shared_ptr<rclcpp::Node>(std::move(this)),
                    "floor_robot"),
       planning_scene_() {
@@ -30,9 +30,9 @@ FloorRobot::FloorRobot()
   subscription_cbg_ =
       create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
   options.callback_group = subscription_cbg_;
-  // subscriber callback to /rwa5_group3/floor_robot/go_home topic
+  // subscriber callback to /final_group3/floor_robot/go_home topic
   moveit_sub_ = this->create_subscription<std_msgs::msg::String>(
-      "/rwa5_group3/floor_robot/go_home", 10,
+      "/final_group3/floor_robot/go_home", 10,
       std::bind(&FloorRobot::floor_robot_sub_cb, this, std::placeholders::_1),
       options);
 
@@ -116,9 +116,9 @@ FloorRobot::FloorRobot()
       std::bind(&FloorRobot::agv4_status_cb, this, std::placeholders::_1),
       agv_status_options);
 
-  // client to rwa5_group3/AdvancedCamera
+  // client to final_group3/AdvancedCamera
   advanced_camera_client_ =
-      this->create_client<rwa5_group3::srv::AdvancedCamera>("advanced_camera");
+      this->create_client<final_group3::srv::AdvancedCamera>("advanced_camera");
 
   // add models to the planning scene
   add_models_to_planning_scene();
@@ -302,7 +302,7 @@ void FloorRobot::add_single_model_to_planning_scene(
   shapes::ShapeMsg mesh_msg;
 
   std::string package_share_directory =
-      ament_index_cpp::get_package_share_directory("rwa5_group3");
+      ament_index_cpp::get_package_share_directory("final_group3");
   std::stringstream path;
   path << "file://" << package_share_directory << "/meshes/" << mesh_file;
   std::string model_path = path.str();
@@ -1075,7 +1075,7 @@ void FloorRobot::submit_order() {
 
 void FloorRobot::update_parts_vector() {
   auto part_update_request =
-      std::make_shared<rwa5_group3::srv::AdvancedCamera::Request>();
+      std::make_shared<final_group3::srv::AdvancedCamera::Request>();
   part_update_request->request_bins = true;
   part_update_request->request_kts = false;
   auto result_part_update =
@@ -1096,7 +1096,7 @@ void FloorRobot::update_parts_vector() {
 
 void FloorRobot::update_kts_vector() {
   auto kts_update_request =
-      std::make_shared<rwa5_group3::srv::AdvancedCamera::Request>();
+      std::make_shared<final_group3::srv::AdvancedCamera::Request>();
   kts_update_request->request_bins = false;
   kts_update_request->request_kts = true;
   auto result_kts_update =
@@ -1119,7 +1119,7 @@ void FloorRobot::update_kts_vector() {
 
 void FloorRobot::update_agv_vector() {
   auto agv_update_request =
-      std::make_shared<rwa5_group3::srv::AdvancedCamera::Request>();
+      std::make_shared<final_group3::srv::AdvancedCamera::Request>();
   agv_update_request->request_bins = false;
   agv_update_request->request_kts = false;
   agv_update_request->request_agv1 = true;
@@ -1585,7 +1585,7 @@ bool FloorRobot::do_quality_check(std::string order_id) {
 //=============================================//
 void FloorRobot::update_specific_agv_vector(int agv_num) {
   auto agv_update_request =
-      std::make_shared<rwa5_group3::srv::AdvancedCamera::Request>();
+      std::make_shared<final_group3::srv::AdvancedCamera::Request>();
   agv_update_request->request_bins = false;
   agv_update_request->request_kts = false;
   if (agv_num == 1) {

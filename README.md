@@ -6,16 +6,16 @@
 - Put the trial file inside ```~your_ws/src/ariac/ariac_gazebo/config/trials/``` directory
 - Go the workspace root in the terminal
 - ```rosdep install --from-paths src -y --ignore-src```
-- ```colcon build --packages-select rwa5_group3```
+- ```colcon build --packages-select final_group3```
 - ```source install/setup.bash```
-- Run the command to launch the ARIAC competition```ros2 launch ariac_gazebo ariac.launch.py competitor_pkg:=rwa5_group3 sensor_config:=rgb_sensors trial_name:=rwa5_spring2024```
+- Run the command to launch the ARIAC competition```ros2 launch ariac_gazebo ariac.launch.py competitor_pkg:=final_group3 sensor_config:=rgb_sensors trial_name:=final_spring2024```
 
 ## Open other terminal and  the following command 
 - Go the workspace root
 - source ros2 galactic ```source /opt/ros/galactic/setup.bash```
 - Wait for the ariac competition to be in the ready state and the moveit to be in the ready to accept commands stage and then launch the following command:
     - ```source install/setup.bash```
-    - ```ros2 launch rwa5_group3 rwa5_group3.launch.py rviz:=true```, This will launch the competitor package, rviz and the moveit node Note: remove `rviz:=true` if you want to run without rviz.
+    - ```ros2 launch final_group3 final_group3.launch.py rviz:=true```, This will launch the competitor package, rviz and the moveit node Note: remove `rviz:=true` if you want to run without rviz.
 
 ## GPU workload during a complete order run:
 
@@ -50,5 +50,7 @@ Sat Apr 27 23:49:53 2024
 The following video shows the execution of 3 kitting orders with a high priority order interrupting the low priority order at around 17 seconds (video time)
 
 https://github.com/darshit-desai/ARIAC_Group3/assets/36150235/4231f15f-bb5f-4892-bf71-093cda9d9b6f
+
+The final simulation videos (Coming Soon ...)
 
 

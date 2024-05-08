@@ -5,7 +5,7 @@
  *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
  * @brief THe following class has all the methods and attributes for the floor
  * robot to complete only kitting tasks The code was taken from the source
- * reference below and modified to work for RWA5.
+ * reference below and modified to work for Final Project.
  * @version 0.1
  * @date 2024-04-27
  *
@@ -43,7 +43,7 @@
 #include <ariac_msgs/srv/perform_quality_check.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
-#include <rwa5_group3/srv/advanced_camera.hpp>
+#include <final_group3/srv/advanced_camera.hpp>
 #include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <std_srvs/srv/trigger.hpp>
@@ -255,7 +255,7 @@ class FloorRobot : public rclcpp::Node {
   /**
    * @brief Move the floor robot to the target pose
    *
-   * The target pose is set in the rwa5_group3/config/floor_robot.yaml file
+   * The target pose is set in the final_group3/config/floor_robot.yaml file
    * @return true Successfully moved to the target pose
    * @return false Failed to move to the target pose
    */
@@ -572,8 +572,8 @@ class FloorRobot : public rclcpp::Node {
   //! Client for "/ariac/floor_robot_enable_gripper" service
   rclcpp::Client<ariac_msgs::srv::VacuumGripperControl>::SharedPtr
       floor_robot_gripper_enable_;
-  //! Client for "rwa5_group3/advanced_camera" service
-  rclcpp::Client<rwa5_group3::srv::AdvancedCamera>::SharedPtr
+  //! Client for "final_group3/advanced_camera" service
+  rclcpp::Client<final_group3::srv::AdvancedCamera>::SharedPtr
       advanced_camera_client_;
   //! Thickness of the tray in meters
   /*! This is used to ensure the gripper does not collide with the tray when
