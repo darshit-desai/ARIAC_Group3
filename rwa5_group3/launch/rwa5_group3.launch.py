@@ -4,6 +4,7 @@ from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     OpaqueFunction,
+    TimerAction
 )
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch.actions import IncludeLaunchDescription
@@ -23,7 +24,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=generate_parameters(),
     )
 
-    yolo_python_node = Node(package="rwa5_group3", executable="yolo.py")
+    yolo_python_node = Node(package="rwa5_group3", executable="yolo.py", output="screen")
 
     start_rviz = LaunchConfiguration("rviz")
 
@@ -41,7 +42,6 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-
     moveit = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
@@ -51,13 +51,29 @@ def launch_setup(context, *args, **kwargs):
             ]
         )
     )
-
+    timer_action_moveit = TimerAction(
+        period = 5.0,
+        actions=[moveit]
+    )
+    timer_action_rviz = TimerAction(
+        period = 5.0,
+        actions=[rviz_node]
+    )
+    timer_action_yolo = TimerAction(
+        period = 15.0,
+        actions=[yolo_python_node]
+    )
+    timer_action_floor = TimerAction(
+        period = 20.0,
+        actions=[floor_robot_node]
+    )
     nodes_to_start = [
-        floor_robot_node,
-        # yolo_python_node,
-        # rviz_node,
-        # moveit
+        timer_action_moveit,
+        timer_action_rviz,
+        timer_action_yolo,
+        timer_action_floor
     ]
+
 
     return nodes_to_start
 

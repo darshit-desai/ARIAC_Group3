@@ -492,26 +492,25 @@ class FloorRobot : public rclcpp::Node {
    * @param msg
    */
   void agv4_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
-   
-   /**
-    * @brief removes faulty part from the tray
-    * 
-    * @return true 
-    * @return false 
-    */
+
+  /**
+   * @brief removes faulty part from the tray
+   *
+   * @return true
+   * @return false
+   */
   bool move_to_trashbin();
-  
 
-
-    /**
-     * @brief 
-     * 
-     * @param agv_num 
-     * @param part_to_pick 
-     * @return true 
-     * @return false 
-     */
-  bool pick_dropped_part_from_agv(int agv_num, ariac_msgs::msg::PartPose part_to_pick);
+  /**
+   * @brief
+   *
+   * @param agv_num
+   * @param part_to_pick
+   * @return true
+   * @return false
+   */
+  bool pick_dropped_part_from_agv(int agv_num,
+                                  ariac_msgs::msg::PartPose part_to_pick);
 
   //! Client for "/ariac/perform_quality_check" service
   rclcpp::Client<ariac_msgs::srv::PerformQualityCheck>::SharedPtr
@@ -537,13 +536,13 @@ class FloorRobot : public rclcpp::Node {
   /*! This is used to pick up a part */
   double pick_offset_ = 0.003;
 
-  int agv_change_number_; ///> attribute to store the agv number in which part was dropped
+  int agv_change_number_;  ///> attribute to store the agv number in which part
+                           /// was dropped
   //! Mapping between part type constants and part type strings
-
 
   ariac_msgs::msg::PartPose agv1_changed_part_;
   ariac_msgs::msg::PartPose agv2_changed_part_;
-  ariac_msgs::msg::PartPose agv3_changed_part_; 
+  ariac_msgs::msg::PartPose agv3_changed_part_;
   ariac_msgs::msg::PartPose agv4_changed_part_;
 
   std::map<int, std::string> part_types_ = {
@@ -566,10 +565,10 @@ class FloorRobot : public rclcpp::Node {
       {ariac_msgs::msg::Part::REGULATOR, 0.07},
       {ariac_msgs::msg::Part::SENSOR, 0.07}};
   std::map<int, double> part_heights_kit_pick = {
-                {ariac_msgs::msg::Part::BATTERY, 0.0},
-                {ariac_msgs::msg::Part::PUMP, 0.08},
-                {ariac_msgs::msg::Part::REGULATOR, 0.02},
-                {ariac_msgs::msg::Part::SENSOR, 0.02}};
+      {ariac_msgs::msg::Part::BATTERY, 0.0},
+      {ariac_msgs::msg::Part::PUMP, 0.08},
+      {ariac_msgs::msg::Part::REGULATOR, 0.02},
+      {ariac_msgs::msg::Part::SENSOR, 0.02}};
   //! Mapping between quadrant type constants and offsets from the center of
   //! the tray
   std::map<int, std::pair<double, double> > quad_offsets_ = {
@@ -584,8 +583,8 @@ class FloorRobot : public rclcpp::Node {
   };
   //! Position of the linear actuator for different configurations
   std::map<std::string, double> rail_positions_ = {
-      {"agv1", -4.5}, {"agv2", -1.2},   {"agv3", 1.2},
-      {"agv4", 4.5},  {"left_bins", 3}, {"right_bins", -3}, {"trash_bin", -0.096}};
+      {"agv1", -4.5},   {"agv2", -1.2},     {"agv3", 1.2},        {"agv4", 4.5},
+      {"left_bins", 3}, {"right_bins", -3}, {"trash_bin", -0.096}};
   //! Joint value targets for kit tray station 1
   std::map<std::string, double> floor_kts1_js_ = {
       {"linear_actuator_joint", 4.0},       {"floor_shoulder_pan_joint", 1.57},
@@ -600,9 +599,12 @@ class FloorRobot : public rclcpp::Node {
       {"floor_wrist_3_joint", 0.0}};
   //! Joint value targets for trash bin
   std::map<std::string, double> floor_trash_bin_js_ = {
-      {"linear_actuator_joint", -0.096},       {"floor_shoulder_pan_joint", 0.0},
-      {"floor_shoulder_lift_joint", -0.45661}, {"floor_elbow_joint", 1.476491},
-      {"floor_wrist_1_joint", -2.588503},       {"floor_wrist_2_joint", -1.57},
+      {"linear_actuator_joint", -0.096},
+      {"floor_shoulder_pan_joint", 0.0},
+      {"floor_shoulder_lift_joint", -0.45661},
+      {"floor_elbow_joint", 1.476491},
+      {"floor_wrist_1_joint", -2.588503},
+      {"floor_wrist_2_joint", -1.57},
       {"floor_wrist_3_joint", 0.0}};
 
   //! AGV locations for different AGVs.
@@ -626,10 +628,12 @@ class FloorRobot : public rclcpp::Node {
   std::map<int, int> tray_on_agv_ = {
       {1, -1}, {2, -1}, {3, -1}, {4, -1}};  ///> attribute to store tray on AGV
   bool do_quality_check(std::string order_id);
-  bool pick_part_from_tray(int agv_num, int quadrant, ariac_msgs::msg::Part part_to_pick);
+  bool pick_part_from_tray(int agv_num, int quadrant,
+                           ariac_msgs::msg::Part part_to_pick);
   void update_agv_vector();
   void wait_for_attach_completion_pump(double timeout);
-  bool pick_part_from_tray_using_alc(int agv_num, ariac_msgs::msg::Part part_to_pick);
+  bool pick_part_from_tray_using_alc(int agv_num,
+                                     ariac_msgs::msg::Part part_to_pick);
   void update_specific_agv_vector(int agv_num);
   std::vector<ariac_msgs::msg::PartPose> agv1_forfault_parts_;
   std::vector<ariac_msgs::msg::PartPose> agv2_forfault_parts_;

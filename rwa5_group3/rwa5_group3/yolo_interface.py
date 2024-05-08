@@ -103,7 +103,7 @@ class YOLOInterface(Node):
                                                        self.handle_request)
 
         # Subscribers for rgb cameras with callback groups
-        group_bins = MutuallyExclusiveCallbackGroup()
+        group_bins = ReentrantCallbackGroup()
         # 8 subscribers for rgb cameras
         for i in range(1, 9):
             self.create_subscription(
