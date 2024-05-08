@@ -862,11 +862,10 @@ class YOLOInterface(Node):
                     self.find_category_bin3258(centroid_x, centroid_y, bbox[5], bin_cmd)
                 elif bin_cmd == 1 or bin_cmd == 4 or bin_cmd == 6 or bin_cmd == 7:
                     self.find_category_bin4167(centroid_x, centroid_y, bbox[5], bin_cmd)
-        print("\n\nI am after color slot\n\n")
+        print("\n")
         for i in range(1, 9):
-            print("\n\n I am in pose slot")
+            print("\n\n")
             current_arr = getattr(self, f"sorted_pose_array{i}")
-            print(f"Debug arr{i}: {current_arr}")
             if current_arr is not None:
                 sliced_xyz_arr = current_arr[:, :3]
                 xy_pix_points = self.plot_from_3d_2d(sliced_xyz_arr)
@@ -890,7 +889,7 @@ class YOLOInterface(Node):
                         or bin_pose_cmd == 7
                     ):
                         self.find_pose_bin4167(x, y, bin_pose_cmd, current_arr[jdx, :])
-        print("\n\nI am final doing color pose fusion")
+        print("\n")
         for i in range(1, 9):
             slot_centroids_bin = getattr(self, f"slot_centroids_bin{i}")
             slot_pose_bin = getattr(self, f"slot_pose_bin{i}")
