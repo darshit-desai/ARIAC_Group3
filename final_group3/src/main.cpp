@@ -2,7 +2,8 @@
  * @file main.cpp
  * @author Shivam Sehgal(ssehga7@umd.edu), Darshit Desai(Darshit@umd.edu),
  *   Patrik Pordi(ppordi@umd.edu), Rohith(rohithvs@umd.edu)
- * @brief
+ * @brief Main entry point for the floor robot node and the final group project
+ * node
  * @version 0.1
  * @date 2024-04-27
  *

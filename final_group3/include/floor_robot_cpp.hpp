@@ -433,10 +433,14 @@ class FloorRobot : public rclcpp::Node {
       active_orders_;  ///> attribute to store active orders
   std::vector<ariac_msgs::msg::Order>
       completed_orders_;  ///> attribute to store completed orders
-  std::vector<ariac_msgs::msg::PartPose> agv1_forfault_parts_; ///> attribute to store parts dropped in agv1
-  std::vector<ariac_msgs::msg::PartPose> agv2_forfault_parts_; ///> attribute to store parts dropped in agv2
-  std::vector<ariac_msgs::msg::PartPose> agv3_forfault_parts_; ///> attribute to store parts dropped in agv3
-  std::vector<ariac_msgs::msg::PartPose> agv4_forfault_parts_; ///> attribute to store parts dropped in agv4
+  std::vector<ariac_msgs::msg::PartPose>
+      agv1_forfault_parts_;  ///> attribute to store parts dropped in agv1
+  std::vector<ariac_msgs::msg::PartPose>
+      agv2_forfault_parts_;  ///> attribute to store parts dropped in agv2
+  std::vector<ariac_msgs::msg::PartPose>
+      agv3_forfault_parts_;  ///> attribute to store parts dropped in agv3
+  std::vector<ariac_msgs::msg::PartPose>
+      agv4_forfault_parts_;  ///> attribute to store parts dropped in agv4
   rclcpp::CallbackGroup::SharedPtr
       competition_timer_cbg_;  ///> callback group for competition timer
   rclcpp::CallbackGroup::SharedPtr
@@ -516,50 +520,51 @@ class FloorRobot : public rclcpp::Node {
   bool pick_dropped_part_from_agv(int agv_num,
                                   ariac_msgs::msg::PartPose part_to_pick);
   /**
-   * @brief Function to run the quality check and find out if the part is faulty or not
-   * 
-   * @param order_id 
-   * @return true 
-   * @return false 
+   * @brief Function to run the quality check and find out if the part is faulty
+   * or not
+   *
+   * @param order_id
+   * @return true
+   * @return false
    */
   bool do_quality_check(std::string order_id);
   /**
    * @brief Function to pick the part from the tray if it is found to be faulty
-   * 
-   * @param part 
-   * @return true 
-   * @return false 
+   *
+   * @param part
+   * @return true
+   * @return false
    */
   bool pick_part_from_tray(int agv_num, int quadrant,
                            ariac_msgs::msg::Part part_to_pick);
   /**
-   * @brief Function to update the agv vector and also update the integer which indicates
-   * the change in the specific agv
-   * 
+   * @brief Function to update the agv vector and also update the integer which
+   * indicates the change in the specific agv
+   *
    */
   void update_agv_vector();
   /**
    * @brief Specific function to pick up pump from the tray
-   * 
-   * @param timeout 
+   *
+   * @param timeout
    */
   void wait_for_attach_completion_pump(double timeout);
   /**
-   * @brief Function which uses Advanced Logical Camera to pick up the part from the tray
-   * when the part is found to be faulty in the quality check
-   * 
-   * @param agv_num 
-   * @param part_to_pick 
-   * @return true 
-   * @return false 
+   * @brief Function which uses Advanced Logical Camera to pick up the part from
+   * the tray when the part is found to be faulty in the quality check
+   *
+   * @param agv_num
+   * @param part_to_pick
+   * @return true
+   * @return false
    */
   bool pick_part_from_tray_using_alc(int agv_num,
                                      ariac_msgs::msg::Part part_to_pick);
   /**
    * @brief Specific function for picking up and updating parts in the tray
    * during the quality check
-   * 
-   * @param agv_num 
+   *
+   * @param agv_num
    */
   void update_specific_agv_vector(int agv_num);
 
@@ -677,5 +682,5 @@ class FloorRobot : public rclcpp::Node {
                      hash_pair>
       parts_in_tray_;
   std::map<int, int> tray_on_agv_ = {
-      {1, -1}, {2, -1}, {3, -1}, {4, -1}};  ///> attribute to store tray on AGV  
+      {1, -1}, {2, -1}, {3, -1}, {4, -1}};  ///> attribute to store tray on AGV
 };

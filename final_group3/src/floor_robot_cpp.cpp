@@ -1332,17 +1332,17 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
               planning_scene_.removeCollisionObjects({part_name});
               FloorRobot::update_parts_vector();
               bool picked_part = pick_bin_part(kit_part.part);
-              if (picked_part && place_part_in_tray(order.kitting_task.agv_number,
-                                                 kit_part.quadrant)) {
+              if (picked_part &&
+                  place_part_in_tray(order.kitting_task.agv_number,
+                                     kit_part.quadrant)) {
                 placed_part = true;
-                  parts_in_tray_[std::make_tuple(
-                      order.kitting_task.agv_number, order.kitting_task.tray_id,
-                      kit_part.quadrant)] = kit_part.part;
-                                                 }
-                else {
-                  floor_robot_.detachObject(part_name);
-                  planning_scene_.removeCollisionObjects({part_name});
-                }
+                parts_in_tray_[std::make_tuple(
+                    order.kitting_task.agv_number, order.kitting_task.tray_id,
+                    kit_part.quadrant)] = kit_part.part;
+              } else {
+                floor_robot_.detachObject(part_name);
+                planning_scene_.removeCollisionObjects({part_name});
+              }
             }
             FloorRobot::update_parts_vector();
           } else {
@@ -1371,13 +1371,12 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
         pick_part_from_tray_using_alc(order.kitting_task.agv_number,
                                       kit_part.part);
         while (do_quality_check(order.id) == false) {
-          std::string part_name =
-            part_colors_[kit_part.part.color] + "_" +
-            part_types_[kit_part.part.type];
+          std::string part_name = part_colors_[kit_part.part.color] + "_" +
+                                  part_types_[kit_part.part.type];
           floor_robot_.detachObject(part_name);
           planning_scene_.removeCollisionObjects({part_name});
           pick_part_from_tray_using_alc(order.kitting_task.agv_number,
-                                      kit_part.part);
+                                        kit_part.part);
           move_to_trashbin();
         }
         if (pick_bin_part(kit_part.part) == true) {
@@ -1422,9 +1421,7 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
       bool pick_result = true;
       bool placed_part = false;
       while (pick_result && !placed_part) {
-        
         if (pick_bin_part(kit_part.part)) {
-
           placed_part = place_part_in_tray(order.kitting_task.agv_number,
                                            kit_part.quadrant);
           if (!placed_part) {
@@ -1484,17 +1481,17 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
               planning_scene_.removeCollisionObjects({part_name});
               FloorRobot::update_parts_vector();
               bool picked_part = pick_bin_part(kit_part.part);
-              if (picked_part && place_part_in_tray(order.kitting_task.agv_number,
-                                                 kit_part.quadrant)) {
+              if (picked_part &&
+                  place_part_in_tray(order.kitting_task.agv_number,
+                                     kit_part.quadrant)) {
                 placed_part = true;
-                  parts_in_tray_[std::make_tuple(
-                      order.kitting_task.agv_number, order.kitting_task.tray_id,
-                      kit_part.quadrant)] = kit_part.part;
-                                                 }
-                else {
-                  floor_robot_.detachObject(part_name);
-                  planning_scene_.removeCollisionObjects({part_name});
-                }
+                parts_in_tray_[std::make_tuple(
+                    order.kitting_task.agv_number, order.kitting_task.tray_id,
+                    kit_part.quadrant)] = kit_part.part;
+              } else {
+                floor_robot_.detachObject(part_name);
+                planning_scene_.removeCollisionObjects({part_name});
+              }
             }
             FloorRobot::update_parts_vector();
           } else {
@@ -1522,13 +1519,12 @@ bool FloorRobot::complete_kitting_task(ariac_msgs::msg::Order order) {
         pick_part_from_tray_using_alc(order.kitting_task.agv_number,
                                       kit_part.part);
         while (do_quality_check(order.id) == false) {
-          std::string part_name =
-            part_colors_[kit_part.part.color] + "_" +
-            part_types_[kit_part.part.type];
+          std::string part_name = part_colors_[kit_part.part.color] + "_" +
+                                  part_types_[kit_part.part.type];
           floor_robot_.detachObject(part_name);
           planning_scene_.removeCollisionObjects({part_name});
           pick_part_from_tray_using_alc(order.kitting_task.agv_number,
-                                      kit_part.part);
+                                        kit_part.part);
           move_to_trashbin();
         }
         if (pick_bin_part(kit_part.part) == true) {
@@ -1692,7 +1688,7 @@ bool FloorRobot::pick_part_from_tray_using_alc(
                         part_pose.position.z + 0.3, set_robot_orientation(0)));
 
   move_through_waypoints(waypoints, 0.3, 0.3);
-  
+
   return true;
 }
 

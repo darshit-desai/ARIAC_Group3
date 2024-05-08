@@ -435,7 +435,8 @@ class YOLOInterface(Node):
             self.slot_centroids_bin7 = slot_centroids_bin
 
     def find_pose_bin3258(self, centroid_x, centroid_y, bin_cmd, pose_array):
-        """Localizing parts in slots according to pixel coordinates
+        """Localizing parts in slots according to pixel coordinates projected
+        from 3d to 2d
 
         Args:
             centroid_x (int): centroid x of the bbox
@@ -493,7 +494,8 @@ class YOLOInterface(Node):
             self.slot_pose_bin8 = slot_centroids_bin
 
     def find_pose_bin4167(self, centroid_x, centroid_y, bin_cmd, pose_array):
-        """Localizing parts in slots according to pixel coordinates
+        """Localizing parts in slots according to pixel coordinates projected
+        from 3d to 2d
 
         Args:
             centroid_x (int): centroid x of the bbox
