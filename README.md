@@ -53,6 +53,10 @@ https://github.com/darshit-desai/ARIAC_Group3/assets/36150235/4231f15f-bb5f-4892
 
 The final simulation videos simulating the gripper fail challenge and the faulty part challenge is given below:
 
+https://github.com/darshit-desai/ARIAC_Group3/assets/36150235/bd2ccfd0-3223-4a48-a9ee-568d6aae4a1c
+
+
+
 
 
 
