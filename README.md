@@ -51,6 +51,8 @@ The following video shows the execution of 3 kitting orders with a high priority
 
 https://github.com/darshit-desai/ARIAC_Group3/assets/36150235/4231f15f-bb5f-4892-bf71-093cda9d9b6f
 
-The final simulation videos (Coming Soon ...)
+The final simulation videos simulating the gripper fail challenge and the faulty part challenge is given below:
+
+
 
 
